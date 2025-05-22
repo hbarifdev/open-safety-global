@@ -69,12 +69,12 @@ const Header: React.FC = () => {
           </div>
 
           {/* Logo */}
-          <a href="/" className="flex items-center group">
+          <Link to="/" className="flex items-center group">
             <Logo className="h-12 w-12 text-orange-500" />
             <span className="ml-3 text-gray-800 text-lg md:text-xl font-medium group-hover:text-blue-600 transition-colors">
               Open Safety Equipment Ltd
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Search */}
           <div className="hidden md:flex items-center flex-1 max-w-xl mx-8">

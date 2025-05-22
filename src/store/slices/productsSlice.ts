@@ -23,7 +23,7 @@ const initialState: ProductsState = {
       name: 'Incursion CMR Compact Military Rebreather',
       category: 'military',
       price: 0,
-      image: '/images/incursion-cmr.jpg',
+      image: '/assets/images/product-placeholder.jpg',
       description: 'Compact military rebreather designed for tactical operations.',
     },
     {
@@ -31,7 +31,7 @@ const initialState: ProductsState = {
       name: 'Umbilical Supplied Rebreather',
       category: 'commercial',
       price: 161000,
-      image: '/images/umbilical-rebreather.jpg',
+      image: '/assets/images/product-placeholder.jpg',
       description: 'Professional umbilical supplied rebreather for commercial diving operations.',
     },
     {
@@ -39,7 +39,7 @@ const initialState: ProductsState = {
       name: 'Ironman HUD Divers Display',
       category: 'sports',
       price: 0,
-      image: '/images/ironman-hud.jpg',
+      image: '/assets/images/product-placeholder.jpg',
       description: 'Advanced heads-up display for professional and sport divers.',
     },
     {
@@ -47,7 +47,7 @@ const initialState: ProductsState = {
       name: 'iBreathe MkIV Respiratory Simulator',
       category: 'respiratory',
       price: 143500,
-      image: '/images/ibreathe-simulator.jpg',
+      image: '/assets/images/product-placeholder.jpg',
       description: 'State-of-the-art respiratory simulation technology for training and validation.',
     },
     {
@@ -55,7 +55,7 @@ const initialState: ProductsState = {
       name: 'Special Forces Divers Tactical Vest',
       category: 'military',
       price: 0,
-      image: '/images/tactical-vest.jpg',
+      image: '/assets/images/product-placeholder.jpg',
       description: 'Specialized tactical vest designed for military diving operations.',
     },
   ],

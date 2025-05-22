@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Search, ShoppingCart, Menu, X } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { Search, ShoppingCart, Menu, X } from 'lucide-react';
 import Logo from '../ui/Logo';
 import CurrencyDropdown from '../ui/CurrencyDropdown';
 import CartDropdown from './CartDropdown';
 import NavigationMenu from './NavigationMenu';
+import { formatPrice } from '../../utils/formatPrice';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +15,7 @@ const Header: React.FC = () => {
   const cartRef = useRef<HTMLDivElement>(null);
   
   const cartItems = useSelector((state: RootState) => state.cart.items);
+  const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
   const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   useEffect(() => {
@@ -105,7 +107,7 @@ const Header: React.FC = () => {
               </div>
               <div className="hidden sm:block text-left">
                 <span className="text-sm text-gray-500">Cart</span>
-                <p className="font-medium text-gray-900">${cartTotal.toFixed(2)}</p>
+                <p className="font-medium text-gray-900">{formatPrice(cartTotal, exchangeRate, selectedCurrency)}</p>
               </div>
             </button>
             {isCartOpen && <CartDropdown items={cartItems} total={cartTotal} />}

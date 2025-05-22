@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Product } from '../../store/slices/productsSlice';
 import { addToCart } from '../../store/slices/cartSlice';
 import { formatPrice } from '../../utils/formatPrice';
-import { AppDispatch } from '../../store'; // Import your AppDispatch type
+import { AppDispatch, RootState } from '../../store';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +13,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isAdding, setIsAdding] = useState(false);
+  const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
 
   const handleAddToCart = useCallback(async () => {
     setIsAdding(true);
@@ -62,7 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="mt-2">
           {hasPrice ? (
             <span className="text-lg font-bold text-gray-900">
-              {formatPrice(product.price)}
+              {formatPrice(product.price, exchangeRate, selectedCurrency)}
             </span>
           ) : (
             <span className="text-sm font-medium text-gray-600">

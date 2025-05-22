@@ -1,7 +1,10 @@
 import { X } from 'lucide-react';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { increaseQuantity, decreaseQuantity, removeFromCart } from '../../store/slices/cartSlice';
+import { RootState } from '../../store';
+import { formatPrice } from '../../utils/formatPrice';
+
 
 interface CartItem {
   id: string;
@@ -17,6 +20,9 @@ interface CartDropdownProps {
 }
 
 const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
+
+  const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
+
   const dispatch = useDispatch();
 
   const handleIncreaseQuantity = (id: string) => {
@@ -29,6 +35,7 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeFromCart(id));
+
   };
 
   return (
@@ -53,7 +60,7 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
                   <h4 className="text-sm font-medium text-gray-900 line-clamp-1">{item.name}</h4>
                   <div className="mt-1 flex items-center justify-between">
                     <div className="text-sm text-gray-600">
-                      <span>{item.quantity} × ${item.price.toFixed(2)}</span>
+                      <span>{item.quantity} × {formatPrice(item.price * item.quantity, exchangeRate, selectedCurrency)}</span>
                     </div>
                     <div className="flex items-center">
                       <button
@@ -84,15 +91,17 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
           <div className="p-4 bg-gray-50">
             <div className="flex justify-between mb-3">
               <span className="text-sm text-gray-600">Subtotal</span>
-              <span className="text-sm font-medium text-gray-900">${total.toFixed(2)}</span>
+              <span className="text-sm font-medium text-gray-900">{formatPrice(total, exchangeRate, selectedCurrency)}
+</span>
             </div>
             <div className="flex justify-between mb-4">
               <span className="text-sm text-gray-600">Shipping</span>
-              <span className="text-sm font-medium text-gray-900">$0.00</span>
+              <span className="text-sm font-medium text-gray-900">{formatPrice(0, exchangeRate, selectedCurrency)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-base font-medium text-gray-900">Total</span>
-              <span className="text-base font-medium text-blue-600">${total.toFixed(2)}</span>
+              <span className="text-base font-medium text-blue-600">{formatPrice(total, exchangeRate, selectedCurrency)}
+</span>
             </div>
           </div>
         </>
@@ -101,10 +110,10 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
           <p className="text-gray-600 mb-4">No items in your cart</p>
           <div className="h-px bg-gray-200 mb-4"></div>
           <div className="text-gray-600 mb-2">
-            <span className="font-medium">Shipping:</span> $0.00
+            <span className="font-medium">Shipping:</span> {formatPrice(0, exchangeRate, selectedCurrency)}
           </div>
           <div className="text-blue-600 font-medium mb-6">
-            <span>Total:</span> $0.00
+            <span>Total:</span> {formatPrice(0, exchangeRate, selectedCurrency)}
           </div>
         </div>
       )}

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
 import { addToCart } from '../store/slices/cartSlice';
 import { formatPrice } from '../utils/formatPrice';
 
@@ -27,6 +27,7 @@ type TabType = 'description' | 'datasheet' | 'faqs';
 const ProductPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
   const dispatch = useDispatch<AppDispatch>();
+  const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
   const [selectedVersion, setSelectedVersion] = useState('');
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addError, setAddError] = useState('');
@@ -188,7 +189,7 @@ const ProductPage: React.FC = () => {
         <div className="md:w-1/2">
           <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
           <h2 className="text-xl text-gray-700 mb-4">{product.model}</h2>
-          <p className="text-2xl font-bold text-navy-900 mb-6">{formatPrice(product.price)}</p>
+          <p className="text-2xl font-bold text-navy-900 mb-6">{formatPrice(product.price, exchangeRate, selectedCurrency)}</p>
           <p className="text-gray-700 mb-6">{product.description}</p>
 
           <div className="mb-6">

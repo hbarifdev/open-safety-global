@@ -99,13 +99,13 @@ const CartPage = () => {
               </div>
 
               {/* Checkout Button */}
-              <a
-                href="/checkout"
+              <Link
+                to="/checkout"
                 className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
               >
                 <Lock className="w-4 h-4" />
                 <span>Secure Checkout</span>
-              </a>
+              </Link>
 
               {/* Security Info */}
               <div className="mt-4 text-center">

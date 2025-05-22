@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { increaseQuantity, decreaseQuantity, removeFromCart } from '../../store/slices/cartSlice';
 
 interface CartItem {
@@ -109,18 +110,18 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
       )}
 
       <div className="p-4 border-t border-gray-100 flex flex-col space-y-2">
-        <a 
-          href="/cart" 
+        <Link 
+          to="/cart" 
           className="w-full py-2.5 px-4 bg-white border border-gray-300 rounded-lg text-gray-800 font-medium text-center hover:bg-gray-50 transition-colors"
         >
           VIEW CART
-        </a>
-        <a 
-          href="/checkout" 
+        </Link>
+        <Link 
+          to="/checkout" 
           className="w-full py-2.5 px-4 bg-blue-600 text-white font-medium rounded-lg text-center hover:bg-blue-700 transition-colors"
         >
           CHECKOUT
-        </a>
+        </Link>
       </div>
     </div>
   );

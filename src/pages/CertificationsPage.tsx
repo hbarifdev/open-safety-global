@@ -99,45 +99,6 @@ const CertificationsPage = () => {
           </div>
         ))}
       </div>
-
-      <div className="mt-16 bg-gray-50 p-8 rounded-lg">
-        <h3 className="text-2xl font-bold text-gray-800 mb-4">Our Products</h3>
-        <p className="text-gray-600 mb-6">
-          Open Safety has been delivering modular rebreathers around the world since 2008. These span the entire spectrum of diving, delivering unprecedented performance, ruggedness and safety.
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-          <div>
-            <h4 className="font-semibold mb-2">Corporate</h4>
-            <ul className="space-y-1">
-              <li><a href="#" className="text-blue-600 hover:underline">Service Terms</a></li>
-              <li><a href="#" className="text-blue-600 hover:underline">About Us</a></li>
-              <li><a href="#" className="text-blue-600 hover:underline">Contact us</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-2">Safety</h4>
-            <ul className="space-y-1">
-              <li><a href="#" className="text-blue-600 hover:underline">Safety Data</a></li>
-              <li><a href="#" className="text-blue-600 hover:underline">Certifications</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-2">Subscribe</h4>
-            <ul className="space-y-1">
-              <li><a href="#" className="text-blue-600 hover:underline">Newsletter</a></li>
-              <li><a href="#" className="text-blue-600 hover:underline">Distributors</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="font-semibold mb-2">Legal</h4>
-            <ul className="space-y-1">
-              <li><a href="#" className="text-blue-600 hover:underline">Terms & Conditions</a></li>
-              <li><a href="#" className="text-blue-600 hover:underline">Service & Upgrades</a></li>
-              <li><a href="#" className="text-blue-600 hover:underline">Privacy Policy</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

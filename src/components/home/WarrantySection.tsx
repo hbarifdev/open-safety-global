@@ -1,5 +1,4 @@
-import React from 'react';
-
+import {Link} from "react-router-dom";
 const WarrantySection: React.FC = () => {
   return (
     <section className="py-12 bg-white">
@@ -59,7 +58,7 @@ const WarrantySection: React.FC = () => {
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 mr-3 rounded-full overflow-hidden bg-gray-200">
                     <img 
-                      src="https://images.pexels.com/photos/3760323/pexels-photo-3760323.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                      src="/assets/images/fb-profile.jpg" 
                       alt="Open Safety Equipment Ltd" 
                       className="w-full h-full object-cover"
                     />
@@ -70,13 +69,10 @@ const WarrantySection: React.FC = () => {
                   </div>
                 </div>
                 
-                <button className="w-full py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium">
+                <Link to="//facebook.com/OpenSafetyEquipment" target="_blank" className="block text-center w-100 py-2 mb-3 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium">
                   Follow Page
-                </button>
-                
-                <button className="w-full py-2 border border-gray-300 hover:bg-gray-100 text-gray-700 rounded font-medium">
-                  Share
-                </button>
+                </Link>
+               
               </div>
               
               <div className="mt-6">

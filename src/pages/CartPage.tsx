@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { RootState } from '../store';
 import { increaseQuantity, decreaseQuantity, removeFromCart } from '../store/slices/cartSlice';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, ArrowLeft, Lock } from 'lucide-react';
 
 const CartPage = () => {
   const { items, totalAmount } = useSelector((state: RootState) => state.cart);
@@ -9,50 +10,113 @@ const CartPage = () => {
 
   const fallbackImage = 'https://images.pexels.com/photos/3760323/pexels-photo-3760323.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
-
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold mb-8">Shopping Cart</h1>
+    <div className="bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <Link to="/" className="flex items-center text-gray-600 hover:text-gray-800 mb-4">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Continue Shopping
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center">
+            <ShoppingBag className="w-8 h-8 mr-3" />
+            Shopping Cart ({items.length} {items.length === 1 ? 'item' : 'items'})
+          </h1>
+        </div>
 
-      {items.length === 0 ? (
-        <p className="text-gray-500">Your cart is empty.</p>
-      ) : (
-        <>
-          <div className="space-y-6">
-            {items.map(item => (
-              <div key={item.id} className="flex items-center justify-between border-b pb-4">
-                <div className="flex items-center">
-                  <img src={item.image.startsWith('http') ? item.image : fallbackImage} alt={item.name} className="h-16 w-16 rounded object-cover" />
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium">{item.name}</h3>
-                    <p className="text-sm text-gray-500">${item.price.toFixed(2)}</p>
+        <div className="space-y-8">
+          {/* Cart Items */}
+          <div>
+            {items.length === 0 ? (
+              <div className="bg-white rounded-lg shadow-sm p-8 text-center">
+                <ShoppingBag className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
+                <p className="text-gray-500 mb-4">Add some items to get started</p>
+                <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                  Start Shopping
+                </button>
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow-sm">
+                {items.map((item, index) => (
+                  <div key={item.id} className={`p-6 ${index !== items.length - 1 ? 'border-b border-gray-200' : ''}`}>
+                    <div className="flex items-start space-x-4">
+                      <img
+                        src={item.image.startsWith('http') ? item.image : fallbackImage}
+                        alt={item.name}
+                        className="w-20 h-20 object-cover rounded-lg"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
+                        <p className="text-lg font-semibold text-gray-900 mt-2">
+                          ${item.price.toFixed(2)}
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() => dispatch(decreaseQuantity(item.id))}
+                          className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="w-8 text-center font-medium">{item.quantity}</span>
+                        <button
+                          onClick={() => dispatch(increaseQuantity(item.id))}
+                          className="p-1 rounded-full hover:bg-gray-100 transition-colors"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                      
+                      <button
+                        onClick={() => dispatch(removeFromCart(item.id))}
+                        className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Order Summary */}
+          <div>
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Summary</h2>
+              
+              {/* Price Breakdown */}
+              <div className="space-y-4 mb-6">
+                <div className="border-t pt-4">
+                  <div className="flex justify-between text-2xl font-bold text-gray-900">
+                    <span>Total</span>
+                    <span>${totalAmount.toFixed(2)}</span>
                   </div>
                 </div>
-
-                <div className="flex items-center space-x-4">
-                  <button onClick={() => dispatch(decreaseQuantity(item.id))} className="px-2 py-1 border rounded">-</button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => dispatch(increaseQuantity(item.id))} className="px-2 py-1 border rounded">+</button>
-                  <button onClick={() => dispatch(removeFromCart(item.id))} className="text-red-500">
-                    <Trash2 size={18} />
-                  </button>
-                </div>
               </div>
-            ))}
-          </div>
 
-          <div className="mt-8 flex justify-between items-center">
-            <h2 className="text-xl font-semibold">Total:</h2>
-            <span className="text-xl font-bold text-blue-600">${totalAmount.toFixed(2)}</span>
-          </div>
+              {/* Checkout Button */}
+              <a
+                href="/checkout"
+                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Secure Checkout</span>
+              </a>
 
-          <div className="mt-6">
-            <a href="/checkout" className="inline-block px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-              Proceed to Checkout
-            </a>
+              {/* Security Info */}
+              <div className="mt-4 text-center">
+                <p className="text-xs text-gray-500">
+                  🔒 Your payment information is secure and encrypted
+                </p>
+              </div>
+            </div>
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

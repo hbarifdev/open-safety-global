@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store';
 import { addToCart } from '../store/slices/cartSlice';
 import { formatPrice } from '../utils/formatPrice';
-import ReactImageZoom from 'react-image-zoom';
 
 interface Product {
   id: string;
@@ -32,41 +31,47 @@ const ProductPage: React.FC = () => {
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [addError, setAddError] = useState('');
   const [activeTab, setActiveTab] = useState<TabType>('description');
-  const [zoomActive, setZoomActive] = useState(false);
+  const [zoomVisible, setZoomVisible] = useState(false);
+  const [zoomStyle, setZoomStyle] = useState({});
   const imageRef = useRef<HTMLDivElement>(null);
 
-  // Mock product data
+  const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window;
+
   const product: Product = {
     id: productId || '1',
     name: 'Umbilical Supplied Rebreather',
     model: 'Deep Worker',
-    price: 161000.00,
-    description: 'The Deep Worker umbilical rebreather is a state of the art diving set delivering unprecedented performance down to 350 metres.',
+    price: 161000.0,
+    description:
+      'The Deep Worker umbilical rebreather is a state of the art diving set delivering unprecedented performance down to 350 metres.',
     features: [
       'Available in saturation dive and surface supplied versions',
       'CE and NOISOCK certified for 350m depth',
-      'Functional Safety Certified for CRC 6150/500 SL1 - 5'
+      'Functional Safety Certified for CRC 6150/500 SL1 - 5',
     ],
     datasheet: 'This product meets all international safety standards...',
     faqs: [
       { question: 'What is the maximum depth?', answer: '350 metres' },
-      { question: 'Duration?', answer: 'Up to 10 hours' }
+      { question: 'Duration?', answer: 'Up to 10 hours' },
     ],
     category: 'Commercial Diving',
     subcategory: 'Umbilical Rebreathers',
     image: '/assets/images/DSC_5498.jpg',
     options: {
-      version: ['Surface Supplied', 'Saturation Dive']
-    }
+      version: ['Surface Supplied', 'Saturation Dive'],
+    },
   };
 
-  const zoomProps = {
-    width: 550,
-    height: 550,
-    zoomWidth: 500,
-    img: product.image,
-    zoomStyle: 'z-50 border-4 border-white shadow-xl',
-    zoomPosition: 'original'
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const x = ((e.pageX - left - window.scrollX) / width) * 100;
+    const y = ((e.pageY - top - window.scrollY) / height) * 100;
+
+    setZoomStyle({
+      backgroundImage: `url(${product.image})`,
+      backgroundSize: '200% 200%',
+      backgroundPosition: `${x}% ${y}%`,
+    });
   };
 
   const handleAddToCart = async () => {
@@ -77,7 +82,7 @@ const ProductPage: React.FC = () => {
 
     setIsAddingToCart(true);
     setAddError('');
-    
+
     try {
       const resultAction = await dispatch(
         addToCart({
@@ -92,7 +97,7 @@ const ProductPage: React.FC = () => {
       if (addToCart.fulfilled.match(resultAction)) {
         console.log('Added to cart');
       }
-    } catch (error) {
+    } catch {
       setAddError('Failed to add to cart');
     } finally {
       setIsAddingToCart(false);
@@ -138,47 +143,54 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Breadcrumb */}
       <div className="text-sm text-gray-600 mb-6">
         Home / {product.category} / {product.subcategory} / {product.name}
       </div>
 
-      {/* Product Header */}
       <div className="flex flex-col md:flex-row gap-8 mb-12">
-        {/* Product Image with Zoom */}
-        <div className="md:w-1/2">
-          <div 
+        <div className="md:w-1/2 relative">
+          <div
             ref={imageRef}
-            className="relative overflow-hidden rounded-lg shadow-md"
-            onMouseEnter={() => setZoomActive(true)}
-            onMouseLeave={() => setZoomActive(false)}
+            className="relative w-full border rounded-lg overflow-hidden"
+            onMouseEnter={() => !isTouchDevice && setZoomVisible(true)}
+            onMouseLeave={() => setZoomVisible(false)}
+            onMouseMove={handleMouseMove}
           >
-            {zoomActive ? (
-              <ReactImageZoom {...zoomProps} />
-            ) : (
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/assets/images/product-placeholder.jpg';
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-full h-full max-h-[550px] object-cover"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/assets/images/product-placeholder.jpg';
+              }}
+            />
+            {!isTouchDevice && zoomVisible && (
+              <div
+                className="absolute top-0 left-0 w-full h-full pointer-events-none object-contain"
+                style={{
+                  ...zoomStyle,
+                  transform: 'scale(1.2)',
+                  backgroundRepeat: 'no-repeat',
+                  opacity: 1,
                 }}
               />
             )}
           </div>
           <p className="text-sm text-gray-500 mt-2 text-center">
-            {zoomActive ? 'Zoom active - hover to inspect' : 'Hover to zoom'}
+            {!isTouchDevice
+              ? zoomVisible
+                ? 'Zoom active - hover to inspect'
+                : 'Hover to zoom'
+              : 'Pinch to zoom'}
           </p>
         </div>
 
-        {/* Product Info */}
         <div className="md:w-1/2">
           <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
           <h2 className="text-xl text-gray-700 mb-4">{product.model}</h2>
           <p className="text-2xl font-bold text-navy-900 mb-6">{formatPrice(product.price)}</p>
           <p className="text-gray-700 mb-6">{product.description}</p>
 
-          {/* Product Options */}
           <div className="mb-6">
             <h3 className="font-medium mb-2">Available Options:</h3>
             <div>
@@ -189,26 +201,31 @@ const ProductPage: React.FC = () => {
                 className="w-full p-2 border border-gray-300 rounded"
               >
                 <option value="">Select version</option>
-                {product.options.version.map(version => (
-                  <option key={version} value={version}>{version}</option>
+                {product.options.version.map((version) => (
+                  <option key={version} value={version}>
+                    {version}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
-          {/* Add to Cart */}
           <button
             onClick={handleAddToCart}
             disabled={!selectedVersion || isAddingToCart}
             className={`w-full py-3 px-6 bg-navy-900 hover:bg-navy-800 text-white font-medium rounded transition-colors ${
-              (!selectedVersion || isAddingToCart) ? 'opacity-50 cursor-not-allowed' : ''
+              !selectedVersion || isAddingToCart ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
             {isAddingToCart ? (
               <>
                 <svg className="animate-spin h-5 w-5 mr-2 inline" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
                 </svg>
                 Adding...
               </>
@@ -220,7 +237,6 @@ const ProductPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Product Tabs */}
       <div className="mb-12">
         <div className="border-b border-gray-200">
           <nav className="flex space-x-8">
@@ -240,10 +256,7 @@ const ProductPage: React.FC = () => {
           </nav>
         </div>
 
-        {/* Tab Content */}
-        <div className="py-8">
-          {renderTabContent()}
-        </div>
+        <div className="py-8">{renderTabContent()}</div>
       </div>
     </div>
   );

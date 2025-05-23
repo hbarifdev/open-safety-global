@@ -46,7 +46,7 @@ const Header: React.FC = () => {
             <CurrencyDropdown />
             <div className="flex items-center space-x-4">
               <Link 
-                to="/login" 
+                to={ `${isAuthenticated() ? 'my-account' : 'login'}`}
                 className="text-gray-600 hover:text-blue-600 transition-colors"
               >
                 My Account

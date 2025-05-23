@@ -13,6 +13,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ProductPage from './pages/ProductPage';
+import CategoryPage from './pages/CategoryPage';
+import SubCategoryPage from './pages/SubCategoryPage';
 import CertificationsPage from './pages/CertificationsPage';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
@@ -41,6 +43,8 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/product/:productId" element={<ProductPage />} />
+              <Route path="/:categoryname" element={<CategoryPage />} />
+              <Route path="/:categoryname/:subcategoryname" element={<SubCategoryPage />} />
               <Route path="/certifications" element={<CertificationsPage />} />
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/contact-us" element={<ContactUs />} />

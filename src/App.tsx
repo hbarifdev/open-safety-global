@@ -12,6 +12,7 @@ import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import MyAccountPage from './pages/MyAccountPage';
 import ProductPage from './pages/ProductPage';
 import CategoryPage from './pages/CategoryPage';
 import SubCategoryPage from './pages/SubCategoryPage';
@@ -24,6 +25,8 @@ import SafetyData from './pages/SafetyData';
 import SalesSupport from './pages/SalesSupport';
 import ReturnPolicy from './pages/ReturnPolicy';
 import NotFoundPage from './pages/NotFoundPage';
+import GuestOnlyRoute from './components/hoc/GuestOnlyRoute';
+import ProtectedRoute from './components/hoc/ProtectedRoute';
 
 function App() {
   return (
@@ -39,9 +42,10 @@ function App() {
               <Route path="/sports-diving" element={<SportsDivingPage />} />
               <Route path="/respiratory-validation" element={<RespiratoryValidationPage />} />
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/login" element={<GuestOnlyRoute><LoginPage /></GuestOnlyRoute>} />
+              <Route path="/register" element={<GuestOnlyRoute><RegisterPage /></GuestOnlyRoute>} />
+              <Route path="/forgot-password" element={<GuestOnlyRoute><ForgotPasswordPage /></GuestOnlyRoute>} />
+              <Route path="/my-account" element={<ProtectedRoute><MyAccountPage /></ProtectedRoute>} />
               <Route path="/product/:productId" element={<ProductPage />} />
               <Route path="/:categoryname" element={<CategoryPage />} />
               <Route path="/:categoryname/:subcategoryname" element={<SubCategoryPage />} />

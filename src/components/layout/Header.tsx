@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, Menu, X } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
@@ -8,6 +8,8 @@ import CurrencyDropdown from '../ui/CurrencyDropdown';
 import CartDropdown from './CartDropdown';
 import NavigationMenu from './NavigationMenu';
 import { formatPrice } from '../../utils/formatPrice';
+import { isAuthenticated } from '../../middlewares/auth';
+import { removeSecureCookie } from '../../utils/secureCookie';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +30,13 @@ const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    removeSecureCookie('auth');
+    navigate('/login');
+  };
+
   return (
     <header className="bg-white shadow-sm">
       {/* Top bar */}
@@ -43,12 +52,24 @@ const Header: React.FC = () => {
                 My Account
               </Link>
               <span className="text-gray-300">|</span>
-              <Link 
-                to="/register" 
-                className="text-gray-600 hover:text-blue-600 transition-colors"
-              >
-                Register or Sign In
-              </Link>
+              
+               {isAuthenticated() ? (
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-600 hover:text-red-600 transition-colors"
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to="/register"
+                  className="text-gray-600 hover:text-blue-600 transition-colors"
+                >
+                  Register or Sign In
+                </Link>
+              )}
+            
+
             </div>
           </div>
         </div>

@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { setSecureCookie } from '../utils/secureCookie';
 
 // Define validation schema with Zod
 const loginSchema = z.object({
@@ -19,10 +20,27 @@ const LoginPage = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+  const navigate = useNavigate();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log('Login data:', data);
-    // Add your login logic here
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const response = await fetch('https://lovable-warmth-ed47be2d92.strapiapp.com/api/auth/local', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: data.email, password: data.password }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result?.error?.message || 'Login failed');
+      }
+
+      setSecureCookie('auth', { jwt: result.jwt, user: result.user });
+      navigate('/my-account');
+    } catch (error: any) {
+      alert(error.message);
+    }
   };
 
   return (

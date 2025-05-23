@@ -1,16 +1,15 @@
 import Cookies from 'js-cookie';
 import { encryptData, decryptData } from './encryption';
 
-const DEFAULT_EXPIRES = 7; // days
+const DEFAULT_EXPIRES = 7; 
 
-// Make sure to use the correct prefix for Vite's environment variables
 const isDev = import.meta.env.VITE_NODE_ENV === 'development'; 
 
 export function setSecureCookie(key: string, data: any, expires: number = DEFAULT_EXPIRES): void {
   try {
     const json = JSON.stringify(data);
-    const encrypted = encryptData(json); // Encrypt the data
-    Cookies.set(key, encrypted, { expires }); // Set the encrypted cookie
+    const encrypted = encryptData(json); 
+    Cookies.set(key, encrypted, { expires }); 
     if (isDev) {
       console.log(`Cookie set successfully for ${key}:`, data);
     }
@@ -22,11 +21,11 @@ export function setSecureCookie(key: string, data: any, expires: number = DEFAUL
 }
 
 export function getSecureCookie(key: string): any | null {
-  const encrypted = Cookies.get(key); // Retrieve the cookie value
+  const encrypted = Cookies.get(key); 
   if (!encrypted || typeof encrypted !== 'string') return null;
 
   try {
-    const decrypted = decryptData(encrypted); // Decrypt the cookie value
+    const decrypted = decryptData(encrypted); 
     return JSON.parse(decrypted);
   } catch (error) {
     if (isDev) {
@@ -38,7 +37,7 @@ export function getSecureCookie(key: string): any | null {
 
 export function removeSecureCookie(key: string): void {
   try {
-    Cookies.remove(key); // Remove the cookie
+    Cookies.remove(key); 
     if (isDev) {
       console.log(`Cookie removed: ${key}`);
     }

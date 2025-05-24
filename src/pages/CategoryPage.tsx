@@ -3,6 +3,7 @@ import Sidebar from '../components/layout/Sidebar';
 import { useSyncNavigationFromURL } from '../hooks/useSyncNavigationFromURL';
 import ProductGrid from "../components/products/ProductGrid";
 import HeroSlider from '../components/home/HeroSlider';
+import Slider, { Slide } from "../components/layout/Slider";
 
 const sampleSubCategories = [
   { id: 1, name: 'Multimode Rebreathers', slug: 'multimode-rebreathers' },
@@ -19,6 +20,21 @@ const sampleSubCategories = [
   { id: 12, name: 'Training', slug: 'training' },
 ];
 
+const slides: Slide[] = [
+  {
+    id: 1,
+    title: "Sports Diving",
+    subtitle: "The safest rebreathers packed with innovation",
+    image: "/assets/images/psl1.png",
+  },
+  {
+    id: 2,
+    title: "Military Diving",
+    subtitle: "Advanced tactical solutions for underwater ops",
+    image: "/assets/images/psl3.png",
+  },
+];
+
 const CategoryPage = () => {
   useSyncNavigationFromURL();
   const { categoryname } = useParams();
@@ -27,7 +43,7 @@ const CategoryPage = () => {
       <div className="flex flex-col md:flex-row gap-8 w-full py-4">
       <Sidebar categories={sampleSubCategories} parentSlug={categoryname!} />
       <main className="flex-1">
-        <HeroSlider />
+         <Slider slides={slides} height="h-[300px]" autoPlayInterval={7000} />
         <ProductGrid />
       </main>
     </div>

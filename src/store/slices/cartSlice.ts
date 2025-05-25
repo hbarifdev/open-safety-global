@@ -7,7 +7,7 @@ import {
 
 interface CartItem {
   id: string;
-  name: string;
+  title: string;
   price: number;
   quantity: number;
   image: string;
@@ -68,7 +68,7 @@ const loadCartFromCookie = (): CartState => {
     
     const validItems = cookieData.items.filter(item => 
       item.id && 
-      item.name && 
+      item.title && 
       typeof item.price === 'number' && 
       typeof item.quantity === 'number'
     );

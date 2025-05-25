@@ -8,10 +8,10 @@ interface NavigationMenuProps {
 
 const menuItems = [
   { name: 'HOME', path: '/' },
-  { name: 'MILITARY DIVING', path: '/military-divin' },
-  { name: 'COMMERCIAL DIVING', path: '/commercial-divin' },
-  { name: 'SPORTS DIVING', path: '/sports-divin' },
-  { name: 'RESPIRATORY VALIDATION', path: '/respiratory-validatio' },
+  { name: 'MILITARY DIVING', path: '/military-diving' },
+  { name: 'COMMERCIAL DIVING', path: '/commercial-diving' },
+  { name: 'SPORTS DIVING', path: '/sports-diving' },
+  { name: 'RESPIRATORY VALIDATION', path: '/respiratory-validation' },
 ];
 
 const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen }) => {

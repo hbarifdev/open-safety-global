@@ -4,11 +4,8 @@ import { store } from './store';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import HomePage from './pages/HomePage';
-import MilitaryDivingPage from './pages/MilitaryDivingPage';
-import CommercialDivingPage from './pages/CommercialDivingPage';
-import SportsDivingPage from './pages/SportsDivingPage';
-import RespiratoryValidationPage from './pages/RespiratoryValidationPage';
 import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -37,11 +34,8 @@ function App() {
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<HomePage />} />
-              <Route path="/military-diving" element={<MilitaryDivingPage />} />
-              <Route path="/commercial-diving" element={<CommercialDivingPage />} />
-              <Route path="/sports-diving" element={<SportsDivingPage />} />
-              <Route path="/respiratory-validation" element={<RespiratoryValidationPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/login" element={<GuestOnlyRoute><LoginPage /></GuestOnlyRoute>} />
               <Route path="/register" element={<GuestOnlyRoute><RegisterPage /></GuestOnlyRoute>} />
               <Route path="/forgot-password" element={<GuestOnlyRoute><ForgotPasswordPage /></GuestOnlyRoute>} />

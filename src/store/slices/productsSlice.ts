@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface Product {
   id: string;
-  name: string;
+  title: string;
   category: string;
   price: number;
   image: string;
@@ -20,7 +20,7 @@ const initialState: ProductsState = {
   items: [
     {
       id: '1',
-      name: 'Incursion CMR Compact Military Rebreather',
+      title: 'Incursion CMR Compact Military Rebreather',
       category: 'military',
       price: 0,
       image: '/assets/images/product-placeholder.jpg',
@@ -28,7 +28,7 @@ const initialState: ProductsState = {
     },
     {
       id: '2',
-      name: 'Umbilical Supplied Rebreather',
+      title: 'Umbilical Supplied Rebreather',
       category: 'commercial',
       price: 161,
       image: '/assets/images/product-placeholder.jpg',
@@ -36,7 +36,7 @@ const initialState: ProductsState = {
     },
     {
       id: '3',
-      name: 'Ironman HUD Divers Display',
+      title: 'Ironman HUD Divers Display',
       category: 'sports',
       price: 0,
       image: '/assets/images/product-placeholder.jpg',
@@ -44,7 +44,7 @@ const initialState: ProductsState = {
     },
     {
       id: '4',
-      name: 'iBreathe MkIV Respiratory Simulator',
+      title: 'iBreathe MkIV Respiratory Simulator',
       category: 'respiratory',
       price: 143,
       image: '/assets/images/product-placeholder.jpg',
@@ -52,7 +52,7 @@ const initialState: ProductsState = {
     },
     {
       id: '5',
-      name: 'Special Forces Divers Tactical Vest',
+      title: 'Special Forces Divers Tactical Vest',
       category: 'military',
       price: 0,
       image: '/assets/images/product-placeholder.jpg',

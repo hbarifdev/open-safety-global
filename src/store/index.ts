@@ -1,9 +1,10 @@
-import { configureStore, current } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import cartReducer from './slices/cartSlice';
 import productsReducer from './slices/productsSlice';
 import uiReducer from './slices/uiSlice';
 import currencyReducer from './slices/currencySlice';
 import navigationReducer from './slices/navigationSlice';
+import { apiSlice } from './slices/apiSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,7 +13,11 @@ export const store = configureStore({
     ui: uiReducer,
     currency: currencyReducer,
     navigation: navigationReducer,
+
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware), 
 });
 
 export type RootState = ReturnType<typeof store.getState>;

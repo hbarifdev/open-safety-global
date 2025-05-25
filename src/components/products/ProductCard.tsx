@@ -20,7 +20,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     try {
       await dispatch(addToCart({
         id: product.id,
-        name: product.name,
+        title: product.title,
         price: product.price,
         quantity: 1,
         image: product.image,
@@ -41,8 +41,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <article className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-lg h-full">
       <Link to={productUrl} className="block overflow-hidden h-48 relative">
         <img 
-          src={product.image.startsWith('http') ? product.image : fallbackImage}
-          alt={product.name}
+          src={typeof product.image === 'string' && product.image.startsWith('http') ? product.image : fallbackImage}
+          alt={product.title}
           className="w-full h-full object-cover transform transition-transform hover:scale-105"
           loading="lazy"
           width={300}
@@ -56,7 +56,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="flex-1 p-4 flex flex-col">
         <Link to={productUrl} className="block">
           <h3 className="text-sm font-medium text-gray-900 hover:text-orange-600 transition-colors line-clamp-2">
-            {product.name}
+            {product.title}
           </h3>
         </Link>
 
@@ -77,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <button
               onClick={handleAddToCart}
               disabled={isAdding}
-              aria-label={`Add ${product.name} to cart`}
+              aria-label={`Add ${product.title} to cart`}
               aria-busy={isAdding}
               className={`w-full py-2 px-4 bg-navy-900 hover:bg-navy-800 text-white 
               text-sm font-medium rounded transition-colors focus:outline-none focus:ring-2 focus:ring-navy-500

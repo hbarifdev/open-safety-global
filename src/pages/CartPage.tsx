@@ -49,11 +49,11 @@ const CartPage = () => {
                     <div className="flex items-start space-x-4">
                       <img
                         src={item.image.startsWith('http') ? item.image : fallbackImage}
-                        alt={item.name}
+                        alt={item.title}
                         className="w-20 h-20 object-cover rounded-lg"
                       />
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-medium text-gray-900">{item.name}</h3>
+                        <h3 className="text-lg font-medium text-gray-900">{item.title}</h3>
                         <p className="text-lg font-semibold text-gray-900 mt-2">
                          {formatPrice(getItemTotal(item.price, item.quantity), exchangeRate, selectedCurrency)}
                         </p>

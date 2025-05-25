@@ -23,25 +23,24 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         title: product.title,
         price: product.price,
         quantity: 1,
-        image: product.image,
+        featured: product.featured.url,
       })).unwrap();
     } catch (error) {
       console.error('Failed to add to cart:', error);
-      // Optional: Show error toast/message to user
     } finally {
       setIsAdding(false);
     }
   }, [dispatch, product]);
 
   const fallbackImage = 'https://images.pexels.com/photos/3760323/pexels-photo-3760323.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
-  const productUrl = `/product/${product.id}`;
+  const productUrl = `/product/${product.slug || product.id}`;
   const hasPrice = product.price > 0;
 
   return (
     <article className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-lg h-full">
       <Link to={productUrl} className="block overflow-hidden h-48 relative">
         <img 
-          src={typeof product.image === 'string' && product.image.startsWith('http') ? product.image : fallbackImage}
+          src={product.featured?.url || fallbackImage}
           alt={product.title}
           className="w-full h-full object-cover transform transition-transform hover:scale-105"
           loading="lazy"
@@ -52,6 +51,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           }}
         />
       </Link>
+
 
       <div className="flex-1 p-4 flex flex-col">
         <Link to={productUrl} className="block">

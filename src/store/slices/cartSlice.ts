@@ -10,7 +10,7 @@ interface CartItem {
   title: string;
   price: number;
   quantity: number;
-  image: string;
+  featured: string;
 }
 
 interface PersistedCartState {

@@ -4,7 +4,6 @@ import ProductGrid from "../components/products/ProductGrid";
 import ProductList from "../components/products/ProductList";
 import { useSyncNavigationFromURL } from "../hooks/useSyncNavigationFromURL";
 import Slider, { Slide } from "../components/layout/Slider";
-import Breadcrumb from "../components/layout/Breadcrumb";
 import { useGetCategoryDetailBySlugQuery } from "../store/slices/apiSlice"; 
 
 const slides: Slide[] = [
@@ -28,9 +27,6 @@ const CategoryPage = () => {
   const { categoryname: categorySlug } = useParams();
 
   const { data, isLoading, error } = useGetCategoryDetailBySlugQuery(categorySlug!);
-  console.log("Category Data:", data);
-
-  // Extract subcategories and products dynamically
   const categoryData = data?.data?.[0];
 
   const subcategories = categoryData?.sub_categories?.map((sub: any) => ({
@@ -43,6 +39,7 @@ const CategoryPage = () => {
     id: product.id,
     ...product,
   })) || [];
+console.log("products data", products);
 
   return (
     <div className="container mx-auto py-8">

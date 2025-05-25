@@ -46,8 +46,6 @@ const CategoryPage = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <Breadcrumb />
-
       <div className="flex flex-col md:flex-row gap-8 w-full py-4">
         {/* Sidebar */}
         <aside className="w-full md:w-1/4">

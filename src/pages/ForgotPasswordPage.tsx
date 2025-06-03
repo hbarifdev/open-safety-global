@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,17 +12,45 @@ const forgotPasswordSchema = z.object({
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 const ForgotPasswordPage = () => {
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
   });
 
-  const onSubmit = (data: ForgotPasswordFormData) => {
-    console.log('Password reset requested for:', data.email);
-    // Add your password reset logic here
+  const onSubmit = async (data: ForgotPasswordFormData) => {
+    setMessage(null);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        'https://lovable-warmth-ed47be2d92.strapiapp.com/api/auth/forgot-password',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: data.email }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage('Check your inbox for a password reset email.');
+        reset();
+      } else {
+        setError(result?.error?.message || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      setError('Network error. Please try again later.');
+    }
   };
 
   return (
@@ -47,7 +76,9 @@ const ForgotPasswordPage = () => {
                   id="email"
                   type="email"
                   autoComplete="email"
-                  className={`block w-full px-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                  className={`block w-full px-3 py-2 border ${
+                    errors.email ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
                   {...register('email')}
                 />
                 {errors.email && (
@@ -55,6 +86,9 @@ const ForgotPasswordPage = () => {
                 )}
               </div>
             </div>
+
+            {message && <p className="text-sm text-green-600">{message}</p>}
+            {error && <p className="text-sm text-red-600">{error}</p>}
 
             <div className="flex items-center justify-between">
               <Link

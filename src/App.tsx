@@ -37,13 +37,14 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
               <Route path="/login" element={<GuestOnlyRoute><LoginPage /></GuestOnlyRoute>} />
               <Route path="/register" element={<GuestOnlyRoute><RegisterPage /></GuestOnlyRoute>} />
               <Route path="/forgot-password" element={<GuestOnlyRoute><ForgotPasswordPage /></GuestOnlyRoute>} />
               <Route path="/reset-password" element={<GuestOnlyRoute><ResetPasswordPage /></GuestOnlyRoute>} />
               <Route path="/my-account" element={<ProtectedRoute><MyAccountPage /></ProtectedRoute>} />
-              <Route path="/product/:productId" element={<ProductPage />} />
+              {/* <Route path="/product/:productId" element={<ProductPage />} /> */}
+              <Route path="/product/:productSlug" element={<ProductPage />} />
               <Route path="/:categoryname" element={<CategoryPage />} />
               <Route path="/:categoryname/:subcategoryname" element={<SubCategoryPage />} />
               <Route path="/search" element={<SearchPage />} />

@@ -8,10 +8,10 @@ import { formatPrice } from '../../utils/formatPrice';
 
 interface CartItem {
   id: string;
-  name: string;
+  title: string;
   price: number;
   quantity: number;
-  image: string;
+  featured: string;
 }
 
 interface CartDropdownProps {
@@ -20,7 +20,7 @@ interface CartDropdownProps {
 }
 
 const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
-
+    
   const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
 
   const dispatch = useDispatch();
@@ -51,13 +51,13 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
               <div key={item.id} className="flex items-center py-3 border-b border-gray-100 last:border-0">
                 <div className="h-16 w-16 flex-shrink-0 rounded-md border border-gray-200 overflow-hidden">
                   <img 
-                    src={item.image} 
-                    alt={item.name} 
+                    src={item.featured} 
+                    alt={item.title} 
                     className="h-full w-full object-cover object-center" 
                   />
                 </div>
                 <div className="ml-4 flex-1">
-                  <h4 className="text-sm font-medium text-gray-900 line-clamp-1">{item.name}</h4>
+                  <h4 className="text-sm font-medium text-gray-900 line-clamp-1">{item.title}</h4>
                   <div className="mt-1 flex items-center justify-between">
                     <div className="text-sm text-gray-600">
                       <span>{item.quantity} × {formatPrice(item.price * item.quantity, exchangeRate, selectedCurrency)}</span>

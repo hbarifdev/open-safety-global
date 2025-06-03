@@ -15,8 +15,6 @@ const CartPage = () => {
   const getItemTotal = (price: number, quantity: number) => price * quantity * exchangeRate;
   const cartTotal = items.reduce((sum, item) => sum + getItemTotal(item.price, item.quantity), 0);
 
-  console.log('Cart items:', items);
-
   return (
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">

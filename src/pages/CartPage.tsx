@@ -15,6 +15,8 @@ const CartPage = () => {
   const getItemTotal = (price: number, quantity: number) => price * quantity * exchangeRate;
   const cartTotal = items.reduce((sum, item) => sum + getItemTotal(item.price, item.quantity), 0);
 
+  console.log('Cart items:', items);
+
   return (
     <div className="bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -48,7 +50,7 @@ const CartPage = () => {
                   <div key={item.id} className={`p-6 ${index !== items.length - 1 ? 'border-b border-gray-200' : ''}`}>
                     <div className="flex items-start space-x-4">
                       <img
-                        src={item.image.startsWith('http') ? item.image : fallbackImage}
+                        src={item?.featured || fallbackImage}
                         alt={item.title}
                         className="w-20 h-20 object-cover rounded-lg"
                       />

@@ -7,6 +7,7 @@ import { formatPrice } from '../utils/formatPrice';
 
 interface Product {
   id: number;
+  documentId: string;
   title: string;
   short_descriptions: string;
   price: number;
@@ -53,6 +54,7 @@ const ProductPage: React.FC = () => {
         if (productData) {
           setProduct({
             id: productData.id,
+            documentId: productData.documentId,
             title: productData.title,
             short_descriptions: productData.short_descriptions,
             price: productData.price,
@@ -90,6 +92,32 @@ const ProductPage: React.FC = () => {
     });
   };
 
+  const handleAddToCart = async () => {
+    if (!product) return;
+
+    setIsAddingToCart(true);
+
+    try {
+      const resultAction = await dispatch(
+        addToCart({
+          id: product.documentId,
+          title: product.title,
+          quantity: 1,
+          price: product.price,
+          featured: product.featured?.url || '',
+        })
+      );
+
+      if (!addToCart.fulfilled.match(resultAction)) {
+        console.error('Failed to add to cart:', resultAction.error.message);
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
+
   const toggleAccordion = (index: number) => {
     setAccordionOpen(accordionOpen === index ? null : index);
   };
@@ -99,7 +127,7 @@ const ProductPage: React.FC = () => {
       if (block.type === 'paragraph') {
         return (
           <p key={index} className="text-gray-700">
-            {block.children.map((child: any, i: number) => child.text).join('')}
+            {block.children.map((child: any) => child.text).join('')}
           </p>
         );
       }
@@ -108,7 +136,7 @@ const ProductPage: React.FC = () => {
           <ol key={index} className="list-decimal ml-6 text-gray-700">
             {block.children.map((li: any, i: number) => (
               <li key={i}>
-                {li.children.map((child: any, j: number) => child.text).join('')}
+                {li.children.map((child: any) => child.text).join('')}
               </li>
             ))}
           </ol>
@@ -179,66 +207,102 @@ const ProductPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <div className="flex flex-col md:flex-row gap-8 mb-12">
+          {/* IMAGE + ZOOM */}
           <div className="md:w-1/2 relative">
+            <div
+              ref={imageRef}
+              className="relative w-full border rounded-lg overflow-hidden"
+              onMouseEnter={() => !isTouchDevice && setZoomVisible(true)}
+              onMouseLeave={() => setZoomVisible(false)}
+              onMouseMove={handleMouseMove}
+            >
+              <img
+                src={product.featured?.url}
+                alt={product.title}
+                className="w-full h-full max-h-[550px] object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/assets/images/product-placeholder.jpg';
+                }}
+              />
+              {!isTouchDevice && zoomVisible && (
                 <div
-                  ref={imageRef}
-                  className="relative w-full border rounded-lg overflow-hidden"
-                  onMouseEnter={() => !isTouchDevice && setZoomVisible(true)}
-                  onMouseLeave={() => setZoomVisible(false)}
-                  onMouseMove={handleMouseMove}
-                >
-                  <img
-                    src={product?.featured?.url}
-                    alt={product.title}
-                    className="w-full h-full max-h-[550px] object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/assets/images/product-placeholder.jpg';
-                    }}
-                  />
-                  {!isTouchDevice && zoomVisible && (
-                    <div
-                      className="absolute top-0 left-0 w-full h-full pointer-events-none object-contain"
-                      style={{
-                        ...zoomStyle,
-                        transform: 'scale(1.2)',
-                        backgroundRepeat: 'no-repeat',
-                        opacity: 1,
-                      }}
-                    />
-                  )}
-                </div>
-                <p className="text-sm text-gray-500 mt-2 text-center">
-                  {!isTouchDevice
-                    ? zoomVisible
-                      ? 'Zoom active - hover to inspect'
-                      : 'Hover to zoom'
-                    : 'Pinch to zoom'}
-                </p>
+                  className="absolute top-0 left-0 w-full h-full pointer-events-none object-contain"
+                  style={{
+                    ...zoomStyle,
+                    transform: 'scale(1.2)',
+                    backgroundRepeat: 'no-repeat',
+                    opacity: 1,
+                  }}
+                />
+              )}
+            </div>
+            <p className="text-sm text-gray-500 mt-2 text-center">
+              {!isTouchDevice
+                ? zoomVisible
+                  ? 'Zoom active - hover to inspect'
+                  : 'Hover to zoom'
+                : 'Pinch to zoom'}
+            </p>
+          </div>
 
-          </div>             
-        <div className="md:w-1/2 relative">
-          <h1 className="text-3xl font-bold">{product.title}</h1>
-          <p className="text-lg text-gray-700">{formatPrice(product.price, exchangeRate, selectedCurrency)}</p>
+          {/* DETAILS */}
+          <div className="md:w-1/2 relative">
+            <h1 className="text-3xl font-bold">{product.title}</h1>
+            <p className="text-lg text-gray-700">
+              {formatPrice(product.price, exchangeRate, selectedCurrency)}
+            </p>
+            <p className="text-lg text-gray-700 mt-4 mb-10">{product.short_descriptions}</p>
+            <button
+              onClick={handleAddToCart}
+              disabled={isAddingToCart}
+              className={`w-full py-3 px-6 bg-navy-900 hover:bg-navy-800 text-white font-medium rounded transition-colors ${
+                isAddingToCart ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {isAddingToCart ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 mr-2 inline" viewBox="0 0 24 24">
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Adding...
+                </>
+              ) : (
+                'ADD TO CART'
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* TABS */}
+        <div className="border-t pt-8">
+          <div className="flex gap-4 mb-6">
+            {availableTabs.map((tab) => (
+              <button
+                key={tab}
+                className={`px-4 py-2 border-b-2 font-medium ${
+                  activeTab === tab ? 'border-navy-900 text-navy-900' : 'border-transparent text-gray-500'
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab === 'description' ? 'Description' : tab === 'datasheet' ? 'Datasheet' : 'FAQs'}
+              </button>
+            ))}
+          </div>
+          <div>{renderTabContent()}</div>
         </div>
       </div>
-      </div>
-      {/* TABS */}
-      <div className="flex space-x-4 mb-4">
-        {availableTabs.map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded ${
-              activeTab === tab ? 'bg-black text-white' : 'bg-gray-200 text-black'
-            }`}
-          >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)}
-          </button>
-        ))}
-      </div>
-
-      {/* TAB CONTENT */}
-      <div>{renderTabContent()}</div>
     </div>
   );
 };

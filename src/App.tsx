@@ -9,6 +9,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import MyAccountPage from './pages/MyAccountPage';
 import ProductPage from './pages/ProductPage';
 import CategoryPage from './pages/CategoryPage';
@@ -39,6 +40,7 @@ function App() {
               <Route path="/login" element={<GuestOnlyRoute><LoginPage /></GuestOnlyRoute>} />
               <Route path="/register" element={<GuestOnlyRoute><RegisterPage /></GuestOnlyRoute>} />
               <Route path="/forgot-password" element={<GuestOnlyRoute><ForgotPasswordPage /></GuestOnlyRoute>} />
+              <Route path="/reset-password" element={<GuestOnlyRoute><ResetPasswordPage /></GuestOnlyRoute>} />
               <Route path="/my-account" element={<ProtectedRoute><MyAccountPage /></ProtectedRoute>} />
               <Route path="/product/:productId" element={<ProductPage />} />
               <Route path="/:categoryname" element={<CategoryPage />} />

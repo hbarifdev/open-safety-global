@@ -14,6 +14,7 @@ import MyAccountPage from './pages/MyAccountPage';
 import ProductPage from './pages/ProductPage';
 import CategoryPage from './pages/CategoryPage';
 import SubCategoryPage from './pages/SubCategoryPage';
+import SearchPage from './pages/SearchPage';
 import CertificationsPage from './pages/CertificationsPage';
 import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
@@ -45,6 +46,7 @@ function App() {
               <Route path="/product/:productId" element={<ProductPage />} />
               <Route path="/:categoryname" element={<CategoryPage />} />
               <Route path="/:categoryname/:subcategoryname" element={<SubCategoryPage />} />
+              <Route path="/search" element={<SearchPage />} />
               <Route path="/certifications" element={<CertificationsPage />} />
               <Route path="/about-us" element={<AboutUs />} />
               <Route path="/contact-us" element={<ContactUs />} />

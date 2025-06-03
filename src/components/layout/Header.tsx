@@ -15,10 +15,14 @@ const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const cartRef = useRef<HTMLDivElement>(null);
-  
+
   const cartItems = useSelector((state: RootState) => state.cart.items);
   const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
   const cartTotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -30,11 +34,20 @@ const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
-  const navigate = useNavigate();
-
   const handleLogout = () => {
     removeSecureCookie('auth');
     navigate('/login');
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+    }
   };
 
   return (
@@ -53,7 +66,7 @@ const Header: React.FC = () => {
               </Link>
               <span className="text-gray-300">|</span>
               
-               {isAuthenticated() ? (
+              {isAuthenticated() ? (
                 <button
                   onClick={handleLogout}
                   className="text-gray-600 hover:text-red-600 transition-colors"
@@ -68,8 +81,6 @@ const Header: React.FC = () => {
                   Register or Sign In
                 </Link>
               )}
-            
-
             </div>
           </div>
         </div>
@@ -101,16 +112,18 @@ const Header: React.FC = () => {
 
           {/* Desktop Search */}
           <div className="hidden md:flex items-center flex-1 max-w-xl mx-8">
-            <div className="relative w-full">
+            <form onSubmit={handleSearchSubmit} className="relative w-full">
               <input
                 type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
                 placeholder="Search products..."
                 className="w-full px-4 py-2.5 pr-10 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none"
               />
-              <button className="absolute right-0 top-0 bottom-0 px-3 text-gray-400 hover:text-blue-600" aria-label="Search">
+              <button type="submit" className="absolute right-0 top-0 bottom-0 px-3 text-gray-400 hover:text-blue-600" aria-label="Search">
                 <Search size={20} />
               </button>
-            </div>
+            </form>
           </div>
 
           {/* Cart */}
@@ -138,16 +151,18 @@ const Header: React.FC = () => {
         {/* Mobile Search */}
         {isMenuOpen && (
           <div className="mt-4 md:hidden">
-            <div className="relative">
+            <form onSubmit={handleSearchSubmit} className="relative">
               <input
                 type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
                 placeholder="Search products..."
                 className="w-full px-4 py-2.5 pr-10 rounded-lg border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none"
               />
-              <button className="absolute right-0 top-0 bottom-0 px-3 text-gray-400 hover:text-blue-600" aria-label="Search">
+              <button type="submit" className="absolute right-0 top-0 bottom-0 px-3 text-gray-400 hover:text-blue-600" aria-label="Search">
                 <Search size={20} />
               </button>
-            </div>
+            </form>
           </div>
         )}
       </div>

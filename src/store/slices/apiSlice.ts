@@ -47,6 +47,22 @@ export const apiSlice = createApi({
         },
       }),
     }),
+    searchProducts: builder.query({
+      query: (searchTerm: string) => ({
+        url: '/products',
+        params: {
+          filters: {
+            title: {
+              $containsi: searchTerm,
+            },
+          },
+          populate: {
+            featured: true,
+            gallery: true,
+          },
+        },
+      }),
+    }),
   }),
 });
 
@@ -54,4 +70,5 @@ export const apiSlice = createApi({
 export const {
   useGetSubCategoryDetailBySlugQuery,
   useGetCategoryDetailBySlugQuery,
+  useSearchProductsQuery
 } = apiSlice;

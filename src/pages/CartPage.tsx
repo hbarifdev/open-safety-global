@@ -13,7 +13,7 @@ const CartPage = () => {
   const fallbackImage = 'https://images.pexels.com/photos/3760323/pexels-photo-3760323.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
 
   const getItemTotal = (price: number, quantity: number) => price * quantity * exchangeRate;
-  const cartTotal = items.reduce((sum, item) => sum + getItemTotal(item.price, item.quantity), 0);
+  const cartTotal = items.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
     <div className="bg-gray-50">
@@ -49,26 +49,26 @@ const CartPage = () => {
                     <div className="flex items-start space-x-4">
                       <img
                         src={item?.featured || fallbackImage}
-                        alt={item.title}
+                        alt={item?.title}
                         className="w-20 h-20 object-cover rounded-lg"
                       />
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-medium text-gray-900">{item.title}</h3>
+                        <h3 className="text-lg font-medium text-gray-900">{item?.title}</h3>
                         <p className="text-lg font-semibold text-gray-900 mt-2">
-                         {formatPrice(getItemTotal(item.price, item.quantity), exchangeRate, selectedCurrency)}
+                         {formatPrice(getItemTotal(item?.price, item?.quantity), exchangeRate, selectedCurrency)}
                         </p>
                       </div>
 
                       <div className="flex items-center space-x-2">
                         <button
-                          onClick={() => dispatch(decreaseQuantity(item.id))}
+                          onClick={() => dispatch(decreaseQuantity(item?.id))}
                           className="p-1 rounded-full hover:bg-gray-100 transition-colors"
                         >
                           <Minus className="w-4 h-4" />
                         </button>
-                        <span className="w-8 text-center font-medium">{item.quantity}</span>
+                        <span className="w-8 text-center font-medium">{item?.quantity}</span>
                         <button
-                          onClick={() => dispatch(increaseQuantity(item.id))}
+                          onClick={() => dispatch(increaseQuantity(item?.id))}
                           className="p-1 rounded-full hover:bg-gray-100 transition-colors"
                         >
                           <Plus className="w-4 h-4" />
@@ -76,7 +76,7 @@ const CartPage = () => {
                       </div>
 
                       <button
-                        onClick={() => dispatch(removeFromCart(item.id))}
+                        onClick={() => dispatch(removeFromCart(item?.id))}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
                       >
                         <Trash2 className="w-4 h-4" />

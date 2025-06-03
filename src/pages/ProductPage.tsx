@@ -252,6 +252,8 @@ const ProductPage: React.FC = () => {
               {formatPrice(product.price, exchangeRate, selectedCurrency)}
             </p>
             <p className="text-lg text-gray-700 mt-4 mb-10">{product.short_descriptions}</p>
+             
+          {product.price !== null && (   
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}
@@ -282,6 +284,7 @@ const ProductPage: React.FC = () => {
                 'ADD TO CART'
               )}
             </button>
+          )}
           </div>
         </div>
 

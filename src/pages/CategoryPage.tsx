@@ -1,25 +1,9 @@
 import { useParams } from "react-router-dom";
 import Sidebar from "../components/layout/Sidebar";
-import ProductGrid from "../components/products/ProductGrid";
 import ProductList from "../components/products/ProductList";
 import { useSyncNavigationFromURL } from "../hooks/useSyncNavigationFromURL";
 import Slider, { Slide } from "../components/layout/Slider";
-import { useGetCategoryDetailBySlugQuery } from "../store/slices/apiSlice"; 
-
-const slides: Slide[] = [
-  {
-    id: 1,
-    title: "Sports Diving",
-    subtitle: "The safest rebreathers packed with innovation",
-    image: "/assets/images/psl1.png",
-  },
-  {
-    id: 2,
-    title: "Military Diving",
-    subtitle: "Advanced tactical solutions for underwater ops",
-    image: "/assets/images/psl3.png",
-  },
-];
+import { useGetCategoryDetailBySlugQuery } from "../store/slices/apiSlice";
 
 const CategoryPage = () => {
   useSyncNavigationFromURL();
@@ -39,7 +23,68 @@ const CategoryPage = () => {
     id: product.id,
     ...product,
   })) || [];
-console.log("products data", products);
+
+  // Category-based slides
+  const allSlides: Record<string, Slide[]> = {
+    "military-diving": [
+      {
+        id: 1,
+        title: "Military Diving",
+        subtitle: "Advanced tactical solutions for underwater ops",
+        image: "/assets/images/psl3.png",
+      },
+      {
+        id: 2,
+        title: "Stealth & Strength",
+        subtitle: "Battle-tested gear for elite divers",
+        image: "/assets/images/psl3.png",
+      },
+    ],
+    "commercial-diving": [
+      {
+        id: 3,
+        title: "Commercial Diving",
+        subtitle: "Efficiency and safety in deep-sea industries",
+        image: "/assets/images/psl2.png",
+      },
+      {
+        id: 4,
+        title: "Heavy Duty",
+        subtitle: "Built for industrial underwater challenges",
+        image: "/assets/images/psl2.png",
+      },
+    ],
+    "sports-diving": [
+      {
+        id: 5,
+        title: "Sports Diving",
+        subtitle: "The safest rebreathers packed with innovation",
+        image: "/assets/images/psl1.png",
+      },
+      {
+        id: 6,
+        title: "Dive with Freedom",
+        subtitle: "Gear up for underwater adventures",
+        image: "/assets/images/psl1.png",
+      },
+    ],
+    "respiratory-validation": [
+      {
+        id: 7,
+        title: "Respiratory Validation",
+        subtitle: "Precision and reliability in breathing systems",
+        image: "/assets/images/psl4.jpg",
+      },
+      {
+        id: 8,
+        title: "System Testing",
+        subtitle: "Ensuring safety through validation",
+        image: "/assets/images/psl4.jpg",
+      },
+    ],
+  };
+
+  const slides = allSlides[categorySlug as string] || [];
 
   return (
     <div className="container mx-auto py-8">
@@ -75,4 +120,3 @@ console.log("products data", products);
 };
 
 export default CategoryPage;
-

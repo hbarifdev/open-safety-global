@@ -1,8 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useState } from 'react';
 
-// Define validation schema
+const MAILCHIMP_URL =
+  'https://us4.list-manage.com/subscribe/post?u=08e014afef881feb7518c552a2709374&id=cd933a4851';
+
 const newsletterSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
 });
@@ -13,23 +16,47 @@ const NewsletterSubscription = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isSubmitting },
     reset,
   } = useForm<NewsletterFormData>({
     resolver: zodResolver(newsletterSchema),
   });
 
-  const onSubmit = (data: NewsletterFormData) => {
-    console.log('Subscribing with:', data.email);
-    // Add your newsletter subscription logic here (API call, etc.)
-    // Reset form after successful submission
-    reset();
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+
+  const onSubmit = async (data: NewsletterFormData) => {
+    setError('');
+    const formData = new URLSearchParams();
+    formData.append('EMAIL', data.email);
+    formData.append('b_08e014afef881feb7518c552a2709374_cd933a4851', ''); // Required hidden field
+
+    try {
+      const res = await fetch(MAILCHIMP_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString(),
+      });
+
+      // Mailchimp returns HTML, but if redirected, it's a success
+      if (res.ok || res.redirected) {
+        setSubmitted(true);
+        reset();
+      } else {
+        throw new Error('Subscription failed');
+      }
+    } catch (err) {
+      setError('Failed to subscribe. Please try again.');
+    }
   };
 
   return (
     <div>
       <h3 className="text-lg font-semibold mb-4">Subscribe for Newsletter</h3>
-      {isSubmitSuccessful ? (
+
+      {submitted ? (
         <div className="p-3 bg-green-100 text-green-800 rounded-md">
           Thank you for subscribing!
         </div>
@@ -43,12 +70,21 @@ const NewsletterSubscription = () => {
                 errors.email ? 'border-red-500' : 'border-gray-700'
               } rounded focus:outline-none focus:ring-1 focus:ring-orange-500`}
               {...register('email')}
-              aria-invalid={errors.email ? "true" : "false"}
+              aria-invalid={errors.email ? 'true' : 'false'}
             />
             {errors.email && (
-              <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+              <p className="mt-1 text-sm text-red-500">
+                {errors.email.message}
+              </p>
             )}
           </div>
+
+          {error && (
+            <div className="text-sm text-red-500">
+              {error}
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={isSubmitting}

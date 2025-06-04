@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { addToCart } from '../store/slices/cartSlice';
 import { formatPrice } from '../utils/formatPrice';
-
+import LongDescriptionRenderer from '../components/layout/LongDescriptionRenderer';
+    
 interface Product {
   id: number;
   documentId: string;
@@ -14,7 +15,7 @@ interface Product {
   featured?: {
     url: string;
   };
-  long_descriptions: string[];
+  long_descriptions: any[];
   Datasheet?: {
     name: string;
     url: string;
@@ -153,10 +154,7 @@ const ProductPage: React.FC = () => {
       case 'description':
         return (
           <div className="prose">
-            <h3 className="text-2xl font-bold mb-4">Overview</h3>
-            {product.short_descriptions.split('\n').map((line, index) => (
-              <p key={index}>{line}</p>
-            ))}
+              <LongDescriptionRenderer content={product.long_descriptions} />
           </div>
         );
       case 'datasheet':
@@ -175,8 +173,7 @@ const ProductPage: React.FC = () => {
         ) : null;
       case 'faqs':
         return product.Faqs?.length ? (
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold mb-4">FAQs</h3>
+          <div className="max-w-4xl space-y-4">
             {product.Faqs.map((faq, index) => (
               <div key={index} className="border border-gray-200 rounded">
                 <button
@@ -248,11 +245,14 @@ const ProductPage: React.FC = () => {
           {/* DETAILS */}
           <div className="md:w-1/2 relative">
             <h1 className="text-3xl font-bold">{product.title}</h1>
-            <p className="text-lg text-gray-700">
+ 
+          {product.price !== null && (     
+            <p className="text-lg text-gray-700 mt-2">
               {formatPrice(product.price, exchangeRate, selectedCurrency)}
             </p>
+          )}
             <p className="text-lg text-gray-700 mt-4 mb-10">{product.short_descriptions}</p>
-             
+            
           {product.price !== null && (   
             <button
               onClick={handleAddToCart}

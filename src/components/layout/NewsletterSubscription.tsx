@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { useState } from 'react';
 
 const MAILCHIMP_URL =
-  'https://us4.list-manage.com/subscribe/post?u=08e014afef881feb7518c552a2709374&id=cd933a4851';
+  'https://gmail.us4.list-manage.com/subscribe/post?u=7b0fc9809ad3c8457a732d7e2&id=cd933a4851';
 
 const newsletterSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -29,29 +29,32 @@ const NewsletterSubscription = () => {
     setError('');
     const formData = new URLSearchParams();
     formData.append('EMAIL', data.email);
-    formData.append('b_08e014afef881feb7518c552a2709374_cd933a4851', ''); // Required hidden field
+    // Using the EXACT b_* field from your embedded form
+    formData.append('b_7b0fc9809ad3c8457a732d7e2_cd933a4851', '');
 
     try {
+      // Mailchimp's legacy endpoint requires no-cors mode
       const res = await fetch(MAILCHIMP_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formData.toString(),
+        mode: 'no-cors', // Essential for Mailchimp's endpoint
       });
 
-      // Mailchimp returns HTML, but if redirected, it's a success
-      if (res.ok || res.redirected) {
-        setSubmitted(true);
-        reset();
-      } else {
-        throw new Error('Subscription failed');
-      }
+      // With no-cors we can't read response, but assume success if no error
+      setSubmitted(true);
+      reset();
     } catch (err) {
-      setError('Failed to subscribe. Please try again.');
+      setError('Subscription failed. Please try again later.');
     }
   };
 
+  /* 
+   * Layout remains exactly the same as your original
+   * Only the Mailchimp submission logic was updated
+   */
   return (
     <div>
       <h3 className="text-lg font-semibold mb-4">Subscribe for Newsletter</h3>

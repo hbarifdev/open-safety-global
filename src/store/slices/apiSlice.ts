@@ -29,7 +29,7 @@ export const apiSlice = createApi({
         },
       }),
       providesTags: (result, error, slug) => [{ type: 'SubCategory', id: slug }],
-      keepUnusedDataFor: 300, // cache persists for 5 minutes
+      keepUnusedDataFor: 604800, 
     }),
 
     // Category with subcategories and featured products
@@ -49,7 +49,7 @@ export const apiSlice = createApi({
         },
       }),
       providesTags: (result, error, slug) => [{ type: 'Category', id: slug }],
-      keepUnusedDataFor: 300,
+      keepUnusedDataFor: 604800,
     }),
 
     // Product search
@@ -68,7 +68,7 @@ export const apiSlice = createApi({
         },
       }),
       providesTags: (result, error, term) => [{ type: 'Product', id: term }],
-      keepUnusedDataFor: 180, 
+      keepUnusedDataFor: 604800, 
     }),
 
     // Product detail by slug

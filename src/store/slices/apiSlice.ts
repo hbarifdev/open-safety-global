@@ -10,7 +10,7 @@ export const apiSlice = createApi({
   tagTypes: ['Category', 'SubCategory', 'Product'],
   endpoints: (builder) => ({
 
-    // Subcategory with products
+  // Subcategory with products
     getSubCategoryDetailBySlug: builder.query({
       query: (slug: string) => ({
         url: '/sub-categories',
@@ -29,10 +29,10 @@ export const apiSlice = createApi({
         },
       }),
       providesTags: (result, error, slug) => [{ type: 'SubCategory', id: slug }],
-      keepUnusedDataFor: 604800, 
+      keepUnusedDataFor: 3600, 
     }),
 
-    // Category with subcategories and featured products
+  // Category with subcategories and featured products
     getCategoryDetailBySlug: builder.query({
       query: (slug: string) => ({
         url: '/categories',
@@ -49,7 +49,7 @@ export const apiSlice = createApi({
         },
       }),
       providesTags: (result, error, slug) => [{ type: 'Category', id: slug }],
-      keepUnusedDataFor: 604800,
+      keepUnusedDataFor: 3600,
     }),
 
     // Product search
@@ -68,10 +68,34 @@ export const apiSlice = createApi({
         },
       }),
       providesTags: (result, error, term) => [{ type: 'Product', id: term }],
-      keepUnusedDataFor: 604800, 
+      keepUnusedDataFor: 3600, 
     }),
+// Get products by IDs
+    getProductsByIds: builder.query({
+      query: (documentIds: string[] | number[]) => {
+        const queryString = qs.stringify(
+          {
+            filters: {
+              documentId: {
+                $in: documentIds,
+              },
+            },
+              populate: ['featured'],
+            },
+            { encodeValuesOnly: true }
+          );
 
-    // Product detail by slug
+          return {
+            url: `/products?${queryString}`,
+          };
+        },
+        providesTags: (result, error, documentIds) =>
+          documentIds.map((id) => ({ type: 'Product', id })),
+        keepUnusedDataFor: 3600,
+      }),
+
+
+  // Product detail by slug
     getProductDetailBySlug: builder.query({
       query: (slug: string) => ({
         url: '/products',
@@ -81,7 +105,7 @@ export const apiSlice = createApi({
         },
       }),
       providesTags: (result, error, slug) => [{ type: 'Product', id: slug }],
-      keepUnusedDataFor: 604800,
+      keepUnusedDataFor: 3600,
     }),
   }),
 });
@@ -90,5 +114,6 @@ export const {
   useGetSubCategoryDetailBySlugQuery,
   useGetCategoryDetailBySlugQuery,
   useSearchProductsQuery,
+  useGetProductsByIdsQuery,
   useGetProductDetailBySlugQuery,
 } = apiSlice;

@@ -1,5 +1,16 @@
-import { Product } from '../../store/slices/productsSlice'; 
 import ProductCard from './ProductCard';
+
+interface Product {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  price: number;
+  featured: {
+    url: string;
+  };
+  description: string;
+}
 
 interface ProductListProps {
   products: Product[];
@@ -14,7 +25,7 @@ const ProductList: React.FC<ProductListProps> = ({
   filterByCategory,
   filterByTags,
   limit,
-  className = '',
+  className = 'md:grid-cols-3 lg:grid-cols-4',
 }) => {
   const filteredProducts = products
     .filter((product) =>
@@ -28,7 +39,7 @@ const ProductList: React.FC<ProductListProps> = ({
     .slice(0, limit || products.length);
 
   return (
-    <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 ${className}`}>
+    <div className={`grid grid-cols-1 sm:grid-cols-2 gap-6 ${className}`}>
       {filteredProducts.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

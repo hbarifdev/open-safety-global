@@ -1,39 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { addToCart } from '../store/slices/cartSlice';
+import { useGetProductDetailBySlugQuery } from "../store/slices/apiSlice";
 import { formatPrice } from '../utils/formatPrice';
 import LongDescriptionRenderer from '../components/layout/LongDescriptionRenderer';
     
-interface Product {
-  id: number;
-  documentId: string;
-  title: string;
-  short_descriptions: string;
-  price: number;
-  featured?: {
-    url: string;
-  };
-  long_descriptions: any[];
-  Datasheet?: {
-    name: string;
-    url: string;
-  };
-  Faqs?: {
-    Question: string;
-    Answer: any[];
-  }[];
-  sub_categories?: string[];
-}
-
+// Define the type for the tabs
 type TabType = 'description' | 'datasheet' | 'faqs';
 
 const ProductPage: React.FC = () => {
   const { productSlug } = useParams<{ productSlug: string }>();
   const dispatch = useDispatch<AppDispatch>();
   const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
-  const [product, setProduct] = useState<Product | null>(null);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('description');
   const [zoomVisible, setZoomVisible] = useState(false);
@@ -43,69 +23,43 @@ const ProductPage: React.FC = () => {
 
   const isTouchDevice = typeof window !== 'undefined' && 'ontouchstart' in window;
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/api/products?filters[slug][$eq]=${productSlug}&populate=*`
-        );
-        if (!response.ok) throw new Error('Failed to fetch product data');
-        const json = await response.json();
-        const productData = json.data?.[0];
-        if (productData) {
-          setProduct({
-            id: productData.id,
-            documentId: productData.documentId,
-            title: productData.title,
-            short_descriptions: productData.short_descriptions,
-            price: productData.price,
-            long_descriptions: productData.long_descriptions || [],
-            featured: productData.featured || undefined,
-            Faqs: productData.Faqs || [],
-            Datasheet: productData.Datasheet
-              ? {
-                  name: productData.Datasheet.name,
-                  url: productData.Datasheet.url,
-                }
-              : undefined,
-            sub_categories: productData.sub_categories?.map((s: any) => s.name) || [],
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching product:', error);
-      }
-    };
+  const { data, isLoading, error } = useGetProductDetailBySlugQuery(productSlug!);
+  const productData = data?.data?.[0];
 
-    fetchProduct();
-  }, [productSlug]);
+  if (isLoading) return <div>Loading...</div>;
+
+  if (error) {
+    console.error('Error fetching product data:', error);
+    return <div>Error loading product details.</div>;
+  }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!imageRef.current || !product?.featured?.url) return;
+    if (!imageRef.current || !productData?.featured?.url) return;
 
     const { left, top, width, height } = imageRef.current.getBoundingClientRect();
     const x = ((e.pageX - left - window.scrollX) / width) * 100;
     const y = ((e.pageY - top - window.scrollY) / height) * 100;
 
     setZoomStyle({
-      backgroundImage: `url(${product.featured.url})`,
+      backgroundImage: `url(${productData.featured.url})`,
       backgroundSize: '200% 200%',
       backgroundPosition: `${x}% ${y}%`,
     });
   };
 
   const handleAddToCart = async () => {
-    if (!product) return;
+    if (!productData) return;
 
     setIsAddingToCart(true);
 
     try {
       const resultAction = await dispatch(
         addToCart({
-          id: product.documentId,
-          title: product.title,
+          id: productData.documentId,
+          title: productData.title,
           quantity: 1,
-          price: product.price,
-          featured: product.featured?.url || '',
+          price: productData.price,
+          featured: productData.featured?.url || '',
         })
       );
 
@@ -148,33 +102,33 @@ const ProductPage: React.FC = () => {
   };
 
   const renderTabContent = () => {
-    if (!product) return null;
+    if (!productData) return null;
 
     switch (activeTab) {
       case 'description':
         return (
           <div className="prose">
-              <LongDescriptionRenderer content={product.long_descriptions} />
+              <LongDescriptionRenderer content={productData.long_descriptions} />
           </div>
         );
       case 'datasheet':
-        return product.Datasheet ? (
+        return productData.Datasheet ? (
           <div className="prose">
             <h3 className="text-2xl font-bold mb-4">Technical Datasheet</h3>
             <a
-              href={product.Datasheet.url}
+              href={productData.Datasheet.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline"
             >
-              {product.Datasheet.name}
+              {productData.Datasheet.name}
             </a>
           </div>
         ) : null;
       case 'faqs':
-        return product.Faqs?.length ? (
+        return productData.Faqs?.length ? (
           <div className="max-w-4xl space-y-4">
-            {product.Faqs.map((faq, index) => (
+            {productData.Faqs.map((faq: any, index: number) => (
               <div key={index} className="border border-gray-200 rounded">
                 <button
                   onClick={() => toggleAccordion(index)}
@@ -194,11 +148,9 @@ const ProductPage: React.FC = () => {
     }
   };
 
-  if (!product) return <div>Loading...</div>;
-
   const availableTabs: TabType[] = ['description'];
-  if (product.Datasheet) availableTabs.push('datasheet');
-  if (product.Faqs?.length) availableTabs.push('faqs');
+  if (productData.Datasheet) availableTabs.push('datasheet');
+  if (productData.Faqs?.length) availableTabs.push('faqs');
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -214,8 +166,8 @@ const ProductPage: React.FC = () => {
               onMouseMove={handleMouseMove}
             >
               <img
-                src={product.featured?.url}
-                alt={product.title}
+                src={productData.featured?.url}
+                alt={productData.title}
                 className="w-full h-full max-h-[550px] object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/assets/images/product-placeholder.jpg';
@@ -244,16 +196,16 @@ const ProductPage: React.FC = () => {
 
           {/* DETAILS */}
           <div className="md:w-1/2 relative">
-            <h1 className="text-3xl font-bold">{product.title}</h1>
+            <h1 className="text-3xl font-bold">{productData.title}</h1>
  
-          {product.price !== null && (     
+          {productData.price !== null && (     
             <p className="text-lg text-gray-700 mt-2">
-              {formatPrice(product.price, exchangeRate, selectedCurrency)}
+              {formatPrice(productData.price, exchangeRate, selectedCurrency)}
             </p>
           )}
-            <p className="text-lg text-gray-700 mt-4 mb-10">{product.short_descriptions}</p>
+            <p className="text-lg text-gray-700 mt-4 mb-10">{productData.short_descriptions}</p>
             
-          {product.price !== null && (   
+          {productData.price !== null && (   
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}

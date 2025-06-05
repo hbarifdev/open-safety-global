@@ -23,7 +23,6 @@ export const apiSlice = createApi({
             products: {
               populate: {
                 featured: true,
-                gallery: true,
               },
             },
           },
@@ -44,7 +43,6 @@ export const apiSlice = createApi({
             featured_products: {
               populate: {
                 featured: true,
-                gallery: true,
               },
             },
           },
@@ -66,12 +64,24 @@ export const apiSlice = createApi({
           },
           populate: {
             featured: true,
-            gallery: true,
           },
         },
       }),
       providesTags: (result, error, term) => [{ type: 'Product', id: term }],
       keepUnusedDataFor: 180, 
+    }),
+
+    // Product detail by slug
+    getProductDetailBySlug: builder.query({
+      query: (slug: string) => ({
+        url: '/products',
+        params: {
+          filters: { slug: { $eq: slug } },
+          populate: '*',
+        },
+      }),
+      providesTags: (result, error, slug) => [{ type: 'Product', id: slug }],
+      keepUnusedDataFor: 604800,
     }),
   }),
 });
@@ -80,4 +90,5 @@ export const {
   useGetSubCategoryDetailBySlugQuery,
   useGetCategoryDetailBySlugQuery,
   useSearchProductsQuery,
+  useGetProductDetailBySlugQuery,
 } = apiSlice;

@@ -1,5 +1,5 @@
 import { useParams, useSearchParams } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Sidebar from "../components/layout/Sidebar";
 import ProductList from "../components/products/ProductList";
 import { useSyncNavigationFromURL } from "../hooks/useSyncNavigationFromURL";

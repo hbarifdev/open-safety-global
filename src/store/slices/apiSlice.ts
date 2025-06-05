@@ -7,8 +7,10 @@ export const apiSlice = createApi({
     baseUrl: import.meta.env.VITE_API_BASE_URL + '/api',
     paramsSerializer: (params) => qs.stringify(params, { encodeValuesOnly: true }),
   }),
+  tagTypes: ['Category', 'SubCategory', 'Product'],
   endpoints: (builder) => ({
-    // Subcategory with products, including featured + gallery images
+
+    // Subcategory with products
     getSubCategoryDetailBySlug: builder.query({
       query: (slug: string) => ({
         url: '/sub-categories',
@@ -27,9 +29,11 @@ export const apiSlice = createApi({
           },
         },
       }),
+      providesTags: (result, error, slug) => [{ type: 'SubCategory', id: slug }],
+      keepUnusedDataFor: 300, // cache persists for 5 minutes
     }),
 
-    // Category with subcategories and featured products including featured + gallery images
+    // Category with subcategories and featured products
     getCategoryDetailBySlug: builder.query({
       query: (slug: string) => ({
         url: '/categories',
@@ -46,7 +50,11 @@ export const apiSlice = createApi({
           },
         },
       }),
+      providesTags: (result, error, slug) => [{ type: 'Category', id: slug }],
+      keepUnusedDataFor: 300,
     }),
+
+    // Product search
     searchProducts: builder.query({
       query: (searchTerm: string) => ({
         url: '/products',
@@ -62,13 +70,14 @@ export const apiSlice = createApi({
           },
         },
       }),
+      providesTags: (result, error, term) => [{ type: 'Product', id: term }],
+      keepUnusedDataFor: 180, 
     }),
   }),
 });
 
-
 export const {
   useGetSubCategoryDetailBySlugQuery,
   useGetCategoryDetailBySlugQuery,
-  useSearchProductsQuery
+  useSearchProductsQuery,
 } = apiSlice;

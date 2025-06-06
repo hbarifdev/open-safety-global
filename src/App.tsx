@@ -23,6 +23,11 @@ import TermsConditions from './pages/TermsConditions';
 import SafetyData from './pages/SafetyData';
 import SalesSupport from './pages/SalesSupport';
 import ReturnPolicy from './pages/ReturnPolicy';
+import TrainingPage from './pages/TrainingPage';
+import ExhibitionsPage from './pages/ExhibitionsPage';
+import ServicingPage from './pages/ServicingPage';
+import NewsPage from './pages/NewsPage';
+import GalleryPage from './pages/GalleryPage';
 import NotFoundPage from './pages/NotFoundPage';
 import GuestOnlyRoute from './components/hoc/GuestOnlyRoute';
 import ProtectedRoute from './components/hoc/ProtectedRoute';
@@ -56,6 +61,11 @@ function App() {
               <Route path="/returns-policy" element={<ReturnPolicy />} />
               <Route path="/safety-data" element={<SafetyData />} />
               <Route path="/distributors" element={<SalesSupport />} />
+              <Route path="/training" element={<TrainingPage />} />
+              <Route path="/exhibitions" element={<ExhibitionsPage />} />
+              <Route path="/servicing" element={<ServicingPage />} />
+              <Route path="/news" element={<NewsPage />} />
+              <Route path="/gallery" element={<GalleryPage />} />
 
               {/* Catch-all route for 404 Not Found */}
               <Route path="/404" element={<NotFoundPage />} />

@@ -21,19 +21,19 @@ const ProductGrid: React.FC = () => {
     image: 'assets/images/Training-200px.png',
     title: 'Training',
     description: 'Training onsite and 24/7 remote support',
-    href: '#',
+    href: '/training',
   },
   {
     image: 'assets/images/Exhibitions-200px.png',
     title: 'Exhibitions',
     description: 'Special Session on Functional Safety at UDT Stockholm',
-    href: '#',
+    href: '/exhibitions',
   },
   {
     image: 'assets/images/Servicing-200px.png',
     title: 'Servicing In-Country',
     description: 'Technician Training on-site, with free video refreshers and remote support',
-    href: '#',
+    href: '/servicing',
   },
   {
     image: 'assets/images/Pandemic-200px.png',
@@ -45,7 +45,7 @@ const ProductGrid: React.FC = () => {
     image: 'assets/images/News-200px.png',
     title: 'News',
     description: 'Open Safety’s news timeline',
-    href: '#',
+    href: '/news',
   },
 ];
 
@@ -72,13 +72,13 @@ const ProductGrid: React.FC = () => {
       image: 'assets/images/gallery-200px.png',
       title: 'Gallery',
       description: 'Photo album from our work over the past decade',
-      href: '#',
+      href: '/gallery',
     },
     {
       image: 'assets/images/News-200px.png',
       title: 'News',
       description: 'Open Safety’s news timeline',
-      href: '#',
+      href: '/news',
     },
   ];
 

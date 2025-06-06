@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useSearchProductsQuery } from '../store/slices/apiSlice';
+import ProductSkeletonGrid from '../components/ui/ProductSkeletonGrid';
 
 const SearchPage = () => {
   const location = useLocation();
@@ -9,8 +10,8 @@ const SearchPage = () => {
   const { data, isLoading, isError } = useSearchProductsQuery(searchTerm);
   const products = data?.data || [];
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading results.</div>;
+  if (isLoading) return <div className="container mx-auto py-8"><ProductSkeletonGrid breakpoints={{base:1,sm:2, md:3, lg:4, xl:4 }} /></div>;
+  if (isError) return <div className="container mx-auto py-8">Error loading results.</div>;
 
   return (
     <div className="container mx-auto py-8">
@@ -19,7 +20,7 @@ const SearchPage = () => {
       </h1>
 
       {products.length === 0 ? (
-        <p>No products found.</p>
+        <p>No results found.</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {products.map((product: any) => {

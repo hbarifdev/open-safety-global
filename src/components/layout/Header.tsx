@@ -45,10 +45,13 @@ const Header: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+    if (searchTerm.trim().length < 3) {
+      alert("Search term must be at least 3 characters.");
+      return;
     }
-  };
+    navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
+ };
+
 
   return (
     <header className="bg-white shadow-sm">

@@ -45,12 +45,18 @@ const Header: React.FC = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchTerm.trim().length < 3) {
+    const trimmed = searchTerm.trim();
+
+    if (!trimmed) return;
+
+    if (trimmed.length < 3) {
       alert("Search term must be at least 3 characters.");
       return;
     }
-    navigate(`/search?q=${encodeURIComponent(searchTerm.trim())}`);
- };
+
+    navigate(`/search?q=${encodeURIComponent(trimmed)}`);
+};
+
 
 
   return (

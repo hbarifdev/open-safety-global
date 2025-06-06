@@ -42,7 +42,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <img 
           src={product.featured?.url || fallbackImage}
           alt={product.title}
-          className="w-full h-full object-cover transform transition-transform hover:scale-105"
+          className="w-full h-full object-contain transform transition-transform hover:scale-105"
           loading="lazy"
           width={300}
           height={300}

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import ProductDetailsSkeleton from '../components/ui/ProductDetailsSkeleton';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../store';
 import { addToCart } from '../store/slices/cartSlice';
@@ -26,8 +27,9 @@ const ProductPage: React.FC = () => {
   const { data, isLoading, error } = useGetProductDetailBySlugQuery(productSlug!);
   const productData = data?.data?.[0];
 
-  if (isLoading) return <div>Loading...</div>;
-
+  if (isLoading) {
+    return <ProductDetailsSkeleton />;
+  }
   if (error) {
     console.error('Error fetching product data:', error);
     return <div>Error loading product details.</div>;
@@ -112,32 +114,32 @@ const ProductPage: React.FC = () => {
           </div>
         );
       case 'datasheet':
-        return productData.Datasheet ? (
+        return productData?.Datasheet ? (
           <div className="prose">
             <h3 className="text-2xl font-bold mb-4">Technical Datasheet</h3>
             <a
-              href={productData.Datasheet.url}
+              href={productData?.Datasheet?.url}
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline"
             >
-              {productData.Datasheet.name}
+              {productData?.Datasheet?.name}
             </a>
           </div>
         ) : null;
       case 'faqs':
-        return productData.Faqs?.length ? (
+        return productData?.Faqs?.length ? (
           <div className="max-w-4xl space-y-4">
-            {productData.Faqs.map((faq: any, index: number) => (
+            {productData?.Faqs.map((faq: any, index: number) => (
               <div key={index} className="border border-gray-200 rounded">
                 <button
                   onClick={() => toggleAccordion(index)}
                   className="w-full text-left px-4 py-3 bg-gray-100 hover:bg-gray-200 font-medium"
                 >
-                  {faq.Question}
+                  {faq?.Question}
                 </button>
                 {accordionOpen === index && (
-                  <div className="px-4 py-2">{renderFaqAnswer(faq.Answer)}</div>
+                  <div className="px-4 py-2">{renderFaqAnswer(faq?.Answer)}</div>
                 )}
               </div>
             ))}
@@ -149,8 +151,8 @@ const ProductPage: React.FC = () => {
   };
 
   const availableTabs: TabType[] = ['description'];
-  if (productData.Datasheet) availableTabs.push('datasheet');
-  if (productData.Faqs?.length) availableTabs.push('faqs');
+  if (productData?.Datasheet) availableTabs.push('datasheet');
+  if (productData?.Faqs?.length) availableTabs.push('faqs');
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -166,8 +168,8 @@ const ProductPage: React.FC = () => {
               onMouseMove={handleMouseMove}
             >
               <img
-                src={productData.featured?.url}
-                alt={productData.title}
+                src={productData?.featured?.url}
+                alt={productData?.title}
                 className="w-full h-full max-h-[550px] object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/assets/images/product-placeholder.jpg';
@@ -196,16 +198,16 @@ const ProductPage: React.FC = () => {
 
           {/* DETAILS */}
           <div className="md:w-1/2 relative">
-            <h1 className="text-3xl font-bold">{productData.title}</h1>
+            <h1 className="text-3xl font-bold">{productData?.title}</h1>
  
-          {productData.price !== null && (     
+          {productData?.price !== null && (     
             <p className="text-lg text-gray-700 mt-2">
-              {formatPrice(productData.price, exchangeRate, selectedCurrency)}
+              {formatPrice(productData?.price, exchangeRate, selectedCurrency)}
             </p>
           )}
-            <p className="text-lg text-gray-700 mt-4 mb-10">{productData.short_descriptions}</p>
+            <p className="text-lg text-gray-700 mt-4 mb-10">{productData?.short_descriptions}</p>
             
-          {productData.price !== null && (   
+          {productData?.price !== null && (   
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart}

@@ -1,5 +1,7 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
+import ProductSkeletonGrid from "../components/ui/ProductSkeletonGrid";
+import SidebarSkeleton from "../components/ui/SidebarSkeleton";
 import Sidebar from "../components/layout/Sidebar";
 import ProductList from "../components/products/ProductList";
 import { useSyncNavigationFromURL } from "../hooks/useSyncNavigationFromURL";
@@ -64,7 +66,7 @@ export default function SubCategoryPage() {
         {/* Sidebar */}
         <aside className="w-full md:w-1/4">
           {isLoading ? (
-            <p>Loading categories...</p>
+            <SidebarSkeleton />
           ) : error ? (
             <p>Failed to load categories.</p>
           ) : (
@@ -82,7 +84,7 @@ export default function SubCategoryPage() {
           />
           <div className="mt-10">
             {isLoading ? (
-              <p>Loading products...</p>
+              <ProductSkeletonGrid breakpoints={{base:1,sm:2, md:3, lg:4, xl:4 }} />
             ) : error ? (
               <p>Failed to load products.</p>
             ) : (

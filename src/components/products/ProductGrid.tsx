@@ -1,22 +1,11 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import ProductCard from './ProductCard';
+import ProductSkeletonGrid from '../ui/ProductSkeletonGrid';
 import TabNavigation from '../ui/TabNavigation';
 import InfoCardList from '../layout/InfoCardList';
 import ProductList from './ProductList';
 import { useGetProductsByIdsQuery } from '../../store/slices/apiSlice';
 
-interface Product {
-  id: string;
-  title: string;
-  slug: string;
-  category: string;
-  price: number;
-  featured: {
-    url: string;
-  };
-  description: string;
-}
 
 const ProductGrid: React.FC = () => {
   const activeTab = useSelector((state: RootState) => state.ui.activeTab);
@@ -112,14 +101,18 @@ const featuredProducts = data || [];
         <div className="mt-8">
           {activeTab === 'featured' && (
             <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {isLoading && <p>Loading Featured products...</p>}
-              {error && <p>Error loading featured products. Try a reload.</p>}
-              
-              {/* {featuredProducts.data && featuredProducts.data.map((product:Product) => (
-                <ProductCard key={product.id} product={product} />
-              ))} */}
-            </div>
+              {isLoading && <ProductSkeletonGrid 
+              breakpoints={{
+                base: 1,
+                sm: 2,
+                md: 4,
+                lg: 5,
+              }} 
+              className={'md:grid-cols-4 lg:grid-cols-5'}
+            />}
+             
+              {error && <p>Error loading featured products. Try a reload again.</p>}                           
+
             <ProductList className={'md:grid-cols-4 lg:grid-cols-5'} products={featuredProducts.data}/>
             </>
           )}

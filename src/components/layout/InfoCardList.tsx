@@ -9,11 +9,12 @@ type InfoItem = {
 
 type InfoCardListProps = {
   items: InfoItem[];
+  className?: string;
 };
 
-const InfoCardList: React.FC<InfoCardListProps> = ({ items }) => {
+const InfoCardList: React.FC<InfoCardListProps> = ({ items, className="sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+    <div className={`grid grid-cols-2 gap-6 ${className}`}>
       {items.map((item, index) => (
         <InfoCard
           key={index}

@@ -1,18 +1,21 @@
 import { useParams } from "react-router-dom";
-import ProductSkeletonGrid from "../components/ui/ProductSkeletonGrid";
 import SidebarSkeleton from "../components/ui/SidebarSkeleton";
 import Sidebar from "../components/layout/Sidebar";
-import ProductList from "../components/products/ProductList";
+import { InfoItem } from "../components/layout/DynamicTabGrid";
+import DynamicTabGrid from "../components/layout/DynamicTabGrid";
 import { useSyncNavigationFromURL } from "../hooks/useSyncNavigationFromURL";
 import Slider, { Slide } from "../components/layout/Slider";
 import { useGetCategoryDetailBySlugQuery } from "../store/slices/apiSlice";
+
 
 const CategoryPage = () => {
   useSyncNavigationFromURL();
 
   const { categoryname: categorySlug } = useParams();
 
-  const { data, isLoading, error } = useGetCategoryDetailBySlugQuery(categorySlug!);
+  const safeCategorySlug = categorySlug ?? "";
+
+  const { data, isLoading, error } = useGetCategoryDetailBySlugQuery(safeCategorySlug);
   const categoryData = data?.data?.[0];
 
   const subcategories = categoryData?.sub_categories?.map((sub: any) => ({
@@ -86,7 +89,98 @@ const CategoryPage = () => {
     ],
   };
 
-  const slides = allSlides[categorySlug as string] || [];
+  const slides = allSlides[safeCategorySlug] || [];
+
+  const tabs = [
+    { id: 'featured', label: 'Featured' },
+    { id: 'events', label: 'Events' },
+    { id: 'information', label: 'Information' },
+  ];
+
+  const eventsInfo: InfoItem[] = [
+    {
+      image: 'assets/images/Training-200px.png',
+      title: 'Training',
+      description: 'Training onsite and 24/7 remote support',
+      href: '/training',
+    },
+    {
+      image: 'assets/images/Exhibitions-200px.png',
+      title: 'Exhibitions',
+      description: 'Special Session on Functional Safety at UDT Stockholm',
+      href: '/exhibitions',
+    },
+    {
+      image: 'assets/images/Servicing-200px.png',
+      title: 'Servicing In-Country',
+      description: 'Technician Training on-site, with free video refreshers and remote support',
+      href: '/servicing',
+    },
+    {
+      image: 'assets/images/Pandemic-200px.png',
+      title: 'Pandemic',
+      description: 'Serving you during the pandemic',
+      href: '#',
+    },
+    {
+      image: 'assets/images/News-200px.png',
+      title: 'News',
+      description: 'Open Safety’s news timeline',
+      href: '/news',
+    },
+  ];
+
+  const informationInfo: InfoItem[] = [
+    {
+      image: 'assets/images/OSEL-200px.png',
+      title: 'About Us',
+      description: 'Background, technology and experience.',
+      href: '/about-us',
+    },
+    {
+      image: 'assets/images/Certs-200px.png',
+      title: 'Certifications',
+      description: 'Certifications on our products',
+      href: '/certifications',
+    },
+    {
+      image: 'assets/images/Safety-Data.jpg',
+      title: 'Safety Data',
+      description: 'Detailed reports on all safety aspects',
+      href: '/safety-data',
+    },
+    {
+      image: 'assets/images/gallery-200px.png',
+      title: 'Gallery',
+      description: 'Photo album from our work over the past decade',
+      href: '/gallery',
+    },
+    {
+      image: 'assets/images/News-200px.png',
+      title: 'News',
+      description: 'Open Safety’s news timeline',
+      href: '/news',
+    },
+  ];
+
+  const allEventsInfo: Record<string, InfoItem[]> = {
+    'military-diving': eventsInfo.filter(item => item.title !== "Pandemic"),
+    'commercial-diving': eventsInfo.filter(item => item.title !== "Pandemic"),
+    'sports-diving': eventsInfo.filter(item => item.title !== "Pandemic"),
+    'respiratory-validation': eventsInfo.filter(item => item.title !== "Pandemic"),
+  };
+
+  const allInformationInfo: Record<string, InfoItem[]> = {
+    'military-diving': informationInfo.filter(item => item.title !== "Gallery"),
+    'commercial-diving': informationInfo.filter(item => item.title !== "Gallery"),
+    'sports-diving': informationInfo.filter(item => item.title !== "News"),
+    'respiratory-validation': informationInfo.filter(item => item.title !== "Gallery"),
+  };
+
+  const infoData = {
+    events: allEventsInfo[safeCategorySlug] || [],
+    information: allInformationInfo[safeCategorySlug] || [],
+  };
 
   return (
     <div className="container mx-auto py-8">
@@ -98,7 +192,7 @@ const CategoryPage = () => {
           ) : error ? (
             <p>Failed to load categories.</p>
           ) : (
-            <Sidebar categories={subcategories} parentSlug={categorySlug!} />
+            <Sidebar categories={subcategories} parentSlug={safeCategorySlug} />
           )}
         </aside>
 
@@ -107,13 +201,19 @@ const CategoryPage = () => {
           <Slider slides={slides} height="h-[300px]" autoPlayInterval={7000} />
 
           <div className="mt-10">
-            {isLoading ? (
-              <ProductSkeletonGrid breakpoints={{base:1,sm:2, md:3, lg:4, xl:4 }} />
-            ) : error ? (
-              <p>Failed to load products.</p>
-            ) : (
-              <ProductList products={products} />
-            )}
+            <DynamicTabGrid
+              tabs={tabs}
+              productTabId="featured"
+              productData={products}
+              isProductLoading={isLoading}
+              skeletonBreakpoints={{ base: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+              infoData={infoData}
+              gridClasses={{
+                featured: 'md:grid-cols-3 lg:grid-cols-4',
+                events: 'md:grid-cols-3 lg:grid-cols-4',
+                information: 'md:grid-cols-3 lg:grid-cols-4',
+              }}
+            />
           </div>
         </main>
       </div>

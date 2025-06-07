@@ -1,14 +1,8 @@
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import ProductSkeletonGrid from '../ui/ProductSkeletonGrid';
-import TabNavigation from '../ui/TabNavigation';
-import InfoCardList from '../layout/InfoCardList';
-import ProductList from './ProductList';
+import DynamicTabGrid from "../layout/DynamicTabGrid";
 import { useGetProductsByIdsQuery } from '../../store/slices/apiSlice';
 
 
 const ProductGrid: React.FC = () => {
-  const activeTab = useSelector((state: RootState) => state.ui.activeTab);
 
   const tabs = [
     { id: 'featured', label: 'Featured' },
@@ -95,32 +89,19 @@ const featuredProducts = data || [];
   return (
     <div className="py-8">
       <div className="container mx-auto px-4">
-        {/* Tabs */}
-        <TabNavigation tabs={tabs} activeTab={activeTab} />
-
-        <div className="mt-8">
-          {activeTab === 'featured' && (
-            <>
-              {isLoading && <ProductSkeletonGrid 
-              breakpoints={{
-                base: 1,
-                sm: 2,
-                md: 4,
-                lg: 5,
-              }} 
-              className={'md:grid-cols-4 lg:grid-cols-5'}
-            />}
-             
-              {error && <p>Error loading featured products. Try a reload again.</p>}                           
-
-            <ProductList className={'md:grid-cols-4 lg:grid-cols-5'} products={featuredProducts.data}/>
-            </>
-          )}
-
-          {activeTab === 'events' && <InfoCardList items={eventsInfo} />}
-
-          {activeTab === 'information' && <InfoCardList items={informationInfo} />}
-        </div>
+        <DynamicTabGrid
+              tabs={tabs}
+              productTabId="featured"
+              productData={featuredProducts.data}
+              isProductLoading={isLoading}
+              skeletonBreakpoints={{ base: 1, sm: 2, md: 4, lg: 5, xl: 5 }}
+              infoData={{events: eventsInfo, information: informationInfo}}
+              gridClasses={{
+                featured: 'md:grid-cols-4 lg:grid-cols-5',
+                events: 'md:grid-cols-4 lg:grid-cols-5',
+                information: 'md:grid-cols-4 lg:grid-cols-5',
+              }}
+            />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import SidebarSkeleton from "../components/ui/SidebarSkeleton";
 import Sidebar from "../components/layout/Sidebar";
 import { InfoItem } from "../components/layout/DynamicTabGrid";
@@ -13,9 +13,15 @@ const CategoryPage = () => {
 
   const { categoryname: categorySlug } = useParams();
 
-  const safeCategorySlug = categorySlug ?? "";
+ if (!categorySlug) {
+    return <Navigate to="/404" replace />;
+  }
+  const { data, isLoading, error } = useGetCategoryDetailBySlugQuery(categorySlug);
 
-  const { data, isLoading, error } = useGetCategoryDetailBySlugQuery(safeCategorySlug);
+   if (!isLoading && (error || !data?.data?.[0])) {
+    return <Navigate to="/404" replace />;
+  }
+
   const categoryData = data?.data?.[0];
 
   const subcategories = categoryData?.sub_categories?.map((sub: any) => ({
@@ -89,7 +95,7 @@ const CategoryPage = () => {
     ],
   };
 
-  const slides = allSlides[safeCategorySlug] || [];
+  const slides = allSlides[categorySlug] || [];
 
   const tabs = [
     { id: 'featured', label: 'Featured' },
@@ -178,8 +184,8 @@ const CategoryPage = () => {
   };
 
   const infoData = {
-    events: allEventsInfo[safeCategorySlug] || [],
-    information: allInformationInfo[safeCategorySlug] || [],
+    events: allEventsInfo[categorySlug] || [],
+    information: allInformationInfo[categorySlug] || [],
   };
 
   return (
@@ -192,7 +198,7 @@ const CategoryPage = () => {
           ) : error ? (
             <p>Failed to load categories.</p>
           ) : (
-            <Sidebar categories={subcategories} parentSlug={safeCategorySlug} />
+            <Sidebar categories={subcategories} parentSlug={categorySlug} />
           )}
         </aside>
 

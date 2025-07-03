@@ -8,32 +8,33 @@ const Breadcrumb = () => {
   );
 
   return (
-    <nav className="text-gray-600 mb-4" aria-label="Breadcrumb">
-      <ol className="list-reset flex space-x-2">
-        <li>
-          <Link to="/" className="font-medium text-gray-600 hover:text-blue-600">Home</Link>
-        </li>
-        {parentCategorySlug && (
-          <>
-            <li>/</li>
-            <li>
-              <Link to={`/${parentCategorySlug}`} className="font-medium text-gray-600 hover:text-blue-600">
-                {parentCategorySlug.replace(/-/g, ' ')}
-              </Link>
-            </li>
-          </>
-        )}
-        {childCategorySlug && (
-          <>
-            <li>/</li>
-            <li className="font-medium text-blue-600">
-              {childCategorySlug.replace(/-/g, ' ')}
-            </li>
-          </>
-        )}
-      </ol>
-    </nav>
-  );
+  <nav className="text-gray-600 mb-4" aria-label="Breadcrumb">
+    <ol className="list-reset flex items-strech flex-wrap gap-x-2 gap-y-1">
+      <li>
+        <Link to="/" className="text-sm sm:text-md md:text-lg font-medium text-gray-600 hover:text-blue-600">Home</Link>
+      </li>
+      {parentCategorySlug && (
+        <>
+          <li>/</li>
+          <li>
+            <Link to={`/${parentCategorySlug}`} className="text-sm sm:text-md md:text-lg font-medium text-gray-600 hover:text-blue-600">
+              {parentCategorySlug.replace(/-/g, ' ')}
+            </Link>
+          </li>
+        </>
+      )}
+      {childCategorySlug && (
+        <>
+          <li>/</li>
+          <li className="text-sm sm:text-md md:text-lg font-medium text-blue-600"><p>
+            {childCategorySlug.replace(/-/g, ' ')}
+          </p></li>
+        </>
+      )}
+    </ol>
+  </nav>
+);
+
 };
 
 export default Breadcrumb;

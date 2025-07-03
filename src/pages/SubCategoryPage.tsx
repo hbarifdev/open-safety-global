@@ -72,7 +72,7 @@ export default function SubCategoryPage() {
   };
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-4 sm:py-6 md:py-8 px-4">
       <Breadcrumb />
 
       <div className="flex flex-col md:flex-row gap-8 w-full py-4">

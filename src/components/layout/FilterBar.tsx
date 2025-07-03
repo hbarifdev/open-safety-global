@@ -13,7 +13,7 @@ export default function FilterBar({
 }: FilterBarProps) {
   return (
     <div className="flex justify-between items-center p-4 border-b text-sm">
-      <p>
+      <p className="basis-[60%] sm:basis-auto">
         Showing {Math.min(viewLimit, total)} of {total} results
       </p>
       <div className="flex gap-4">

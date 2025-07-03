@@ -9,7 +9,7 @@ const Breadcrumb = () => {
 
   return (
   <nav className="text-gray-600 mb-4" aria-label="Breadcrumb">
-    <ol className="list-reset flex items-strech flex-wrap gap-x-2 gap-y-1">
+    <ol className="list-reset flex items-end flex-wrap gap-x-2 gap-y-1">
       <li>
         <Link to="/" className="text-sm sm:text-md md:text-lg font-medium text-gray-600 hover:text-blue-600">Home</Link>
       </li>

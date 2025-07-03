@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useSearchProductsQuery } from '../store/slices/apiSlice';
 import ProductSkeletonGrid from '../components/ui/ProductSkeletonGrid';
+import ProductList from "../components/products/ProductList";
+
 
 const SearchPage = () => {
   const location = useLocation();
@@ -14,7 +16,7 @@ const SearchPage = () => {
   if (isError) return <div className="container mx-auto py-8">Error loading results.</div>;
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">
         Search results for: "{searchTerm}"
       </h1>
@@ -22,7 +24,8 @@ const SearchPage = () => {
       {products.length === 0 ? (
         <p>No results found.</p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <>
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {products.map((product: any) => {
             const featuredImage = product?.featured?.url;
             const title = product?.title || 'Untitled';
@@ -34,7 +37,7 @@ const SearchPage = () => {
                   <img
                     src={featuredImage}
                     alt={title}
-                    className="w-full h-60 object-cover rounded"
+                    className="w-full h-60 object-contain rounded"
                   />
                 ) : (
                   <div className="w-full h-40 bg-gray-200 flex items-center justify-center rounded">
@@ -52,9 +55,13 @@ const SearchPage = () => {
                   View Product
                 </Link>
               </div>
+
             );
           })}
-        </div>
+        </div> */}
+
+          <ProductList products={products} />
+        </>
       )}
     </div>
   );

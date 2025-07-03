@@ -39,11 +39,11 @@ const DynamicTabGrid: React.FC<DynamicTabGridProps> = ({
   const activeTab = useSelector((state: RootState) => state.ui.activeTab);
 
   return (
-    <div className="py-8">
-      <div className="container mx-auto px-4">
+    <div className="py-4 sm:py-6 md:py-8">
+      <div className="container mx-auto">
         <TabNavigation tabs={tabs} activeTab={activeTab} />
 
-        <div className="mt-8">
+        <div className="mt-4 sm:mt-6 md:mt-8">
           {/* Product tab */}
           {activeTab === productTabId && (
             <>

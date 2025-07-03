@@ -13,7 +13,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ image, title, description, href }) 
       to={href}
       className="group block text-center transition-all duration-300 hover:shadow-lg rounded-lg p-3 bg-white"
     >
-      <div className="w-full h-48 flex items-center justify-center rounded-md overflow-hidden">
+      <div className="w-full h-24 sm:h-36 md:h-48 flex items-center justify-center rounded-md overflow-hidden">
         <img
           src={image}
           alt={title}

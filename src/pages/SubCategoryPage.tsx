@@ -1,4 +1,4 @@
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, Navigate } from "react-router-dom";
 import { useMemo } from "react";
 import ProductSkeletonGrid from "../components/ui/ProductSkeletonGrid";
 import SidebarSkeleton from "../components/ui/SidebarSkeleton";
@@ -10,19 +10,29 @@ import FilterBar from "../components/layout/FilterBar";
 import { useGetSubCategoryDetailBySlugQuery } from "../store/slices/apiSlice";
 
 export default function SubCategoryPage() {
+  // All hooks at the top (must be unconditional and in same order every render)
   const { categoryname: parentSlug, subcategoryname: subcategorySlug } = useParams();
-  useSyncNavigationFromURL();
-
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const viewLimit = useMemo(() => parseInt(searchParams.get("limit") || "16", 10), [searchParams]);
-  const sortBy = useMemo(() => searchParams.get("sort") || "Name", [searchParams]);
-
+  useSyncNavigationFromURL();
   const {
     data,
     isLoading,
     error,
-  } = useGetSubCategoryDetailBySlugQuery(subcategorySlug!);
+  } = useGetSubCategoryDetailBySlugQuery(subcategorySlug || '');
+
+  // Memoized values (also hooks - must be after regular hooks but before any returns)
+  const viewLimit = useMemo(() => parseInt(searchParams.get("limit") || "16", 10), [searchParams]);
+  const sortBy = useMemo(() => searchParams.get("sort") || "Name", [searchParams]);
+
+  // Now safe to do conditional returns
+  if (!subcategorySlug || !parentSlug) {
+    return <Navigate to="/404" replace />;
+  }
+
+  // // Redirect if data is invalid after loading
+  // if (!isLoading && (error || !data?.data?.[0])) {
+  //   return <Navigate to="/404" replace />;
+  // }
 
   const subcategoryData = data?.data?.[0];
 
@@ -44,7 +54,10 @@ export default function SubCategoryPage() {
     if (sortBy === "Name") {
       sorted.sort((a, b) => a.title.localeCompare(b.title));
     } else if (sortBy === "Newest") {
-      sorted.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+      sorted.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
     }
     return sorted;
   }, [products, sortBy]);
@@ -84,7 +97,9 @@ export default function SubCategoryPage() {
           />
           <div className="mt-10">
             {isLoading ? (
-              <ProductSkeletonGrid breakpoints={{base:1,sm:2, md:3, lg:4, xl:4 }} />
+              <ProductSkeletonGrid
+                breakpoints={{ base: 1, sm: 2, md: 3, lg: 4, xl: 4 }}
+              />
             ) : error ? (
               <p>Failed to load products.</p>
             ) : (

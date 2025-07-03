@@ -206,7 +206,6 @@ const CategoryPage = () => {
         <main className="flex-1">
           <Slider slides={slides} height="h-[300px]" autoPlayInterval={7000} />
 
-          <div className="mt-10">
             <DynamicTabGrid
               tabs={tabs}
               productTabId="featured"
@@ -220,7 +219,6 @@ const CategoryPage = () => {
                 information: 'md:grid-cols-3 lg:grid-cols-4',
               }}
             />
-          </div>
         </main>
       </div>
     </div>

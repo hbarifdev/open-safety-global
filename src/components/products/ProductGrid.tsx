@@ -87,7 +87,7 @@ const productIds = [
 const { data, isLoading, error } = useGetProductsByIdsQuery(productIds);
 const featuredProducts = data || [];
   return (
-    <div className="py-8">
+    <div className="py-4 sm:py-6 md:py-8">
       <div className="container mx-auto px-4">
         <DynamicTabGrid
               tabs={tabs}

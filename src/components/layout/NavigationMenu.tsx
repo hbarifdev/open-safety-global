@@ -1,9 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 
 interface NavigationMenuProps {
   isOpen: boolean;
+  onClose: () => void;
 }
 
 const menuItems = [
@@ -14,7 +13,7 @@ const menuItems = [
   { name: 'RESPIRATORY VALIDATION', path: '/respiratory-validation' },
 ];
 
-const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen }) => {
+const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -22,7 +21,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen }) => {
     <nav className={`bg-navy-900 text-white ${isOpen ? 'block' : 'hidden lg:block'}`}>
       <div className="container mx-auto">
         <ul className="flex flex-col lg:flex-row">
-          {menuItems.map(item => {
+          {menuItems.map((item) => {
             const isActive =
               item.path === '/'
                 ? currentPath === '/'
@@ -32,6 +31,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({ isOpen }) => {
               <li key={item.path} className="group">
                 <Link
                   to={item.path}
+                  onClick={onClose}
                   className={`block py-3 px-4 font-medium hover:bg-blue-800 transition-colors ${
                     isActive ? 'bg-blue-800' : ''
                   }`}

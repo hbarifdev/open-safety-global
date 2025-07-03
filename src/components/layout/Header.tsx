@@ -55,26 +55,26 @@ const Header: React.FC = () => {
     }
 
     navigate(`/search?q=${encodeURIComponent(trimmed)}`);
-};
-
-
+    setIsMenuOpen(false);
+    setSearchTerm('');
+  };
 
   return (
     <header className="bg-white shadow-sm">
       {/* Top bar */}
       <div className="hidden md:block bg-gray-50 border-b border-gray-100">
         <div className="container mx-auto py-2 px-4 flex justify-end items-center text-sm">
-          <div className="flex items-center space-x-6">   
+          <div className="flex items-center space-x-6">
             <CurrencyDropdown />
             <div className="flex items-center space-x-4">
-              <Link 
-                to={ `${isAuthenticated() ? 'my-account' : 'login'}`}
+              <Link
+                to={`${isAuthenticated() ? 'my-account' : 'login'}`}
                 className="text-gray-600 hover:text-blue-600 transition-colors"
               >
                 My Account
               </Link>
               <span className="text-gray-300">|</span>
-              
+
               {isAuthenticated() ? (
                 <button
                   onClick={handleLogout}
@@ -177,7 +177,7 @@ const Header: React.FC = () => {
       </div>
 
       {/* Navigation Menu */}
-      <NavigationMenu isOpen={isMenuOpen} />
+      <NavigationMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </header>
   );
 };

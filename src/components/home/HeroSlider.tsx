@@ -76,7 +76,7 @@ const HeroSlider: React.FC = () => {
   }, [currentSlide]);
   
   return (
-  <div className="relative h-[325px] sm:h-[400px] lg:h-[500px] overflow-hidden">
+  <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] overflow-hidden">
     {/* Slides */}
     {slides.map((slide, index) => (
       <div 
@@ -85,8 +85,8 @@ const HeroSlider: React.FC = () => {
           index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
         }`}
       >
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
+        <div  
+          className="absolute inset-0 bg-cover bg-[position:80%_50%] sm:bg-[position:center] bg-no-repeat"
           style={{ backgroundImage: `url(${slide.image})` }}
         >
           {/* Overlay */}

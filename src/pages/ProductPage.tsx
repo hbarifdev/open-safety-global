@@ -170,7 +170,7 @@ const ProductPage: React.FC = () => {
               <img
                 src={productData?.featured?.url}
                 alt={productData?.title}
-                className="w-full h-full max-h-[550px] object-cover"
+                className="w-full h-full max-h-[550px] object-contain"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/assets/images/product-placeholder.jpg';
                 }}

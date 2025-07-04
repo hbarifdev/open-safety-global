@@ -18,14 +18,6 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    title: 'Sports Diving',
-    subtitle: 'The safest rebreathers packed with innovation for diving from near surface to 350m',
-    image: '/assets/images/psl1.png',
-    buttonText: 'EXPLORE NOW',
-    buttonLink: '/sports-diving',
-  },
-  {
-    id: 2,
     title: 'Military Diving',
     subtitle: 'Advanced tactical solutions for military underwater operations',
     image: '/assets/images/psl3.png',
@@ -33,12 +25,20 @@ const slides: Slide[] = [
     buttonLink: '/military-diving',
   },
   {
-    id: 3,
+    id: 2,
     title: 'Commercial Diving',
     subtitle: 'Professional-grade equipment for the most demanding underwater tasks',
     image: '/assets/images/psl2.png',
     buttonText: 'VIEW EQUIPMENT',
     buttonLink: '/commercial-diving',
+  },
+  {
+    id: 3,
+    title: 'Sports Diving',
+    subtitle: 'The safest rebreathers packed with innovation for diving from near surface to 350m',
+    image: '/assets/images/psl1.png',
+    buttonText: 'EXPLORE NOW',
+    buttonLink: '/sports-diving',
   },
   {
     id: 4,

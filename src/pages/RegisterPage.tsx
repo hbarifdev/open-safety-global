@@ -411,7 +411,7 @@ const RegisterPage = () => {
             {/* Address Section */}
             <div className="border-b border-gray-200 pb-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">
-                Your Address
+                Billing & Shipping Address
               </h3>
 
               <div className="grid grid-cols-1 gap-y-4 gap-x-6 sm:grid-cols-2">
@@ -420,7 +420,7 @@ const RegisterPage = () => {
                     htmlFor="address"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Address
+                    Street Address
                   </label>
                   <input
                     id="address"

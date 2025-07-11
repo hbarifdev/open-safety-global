@@ -19,7 +19,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     setIsAdding(true);
     try {
       await dispatch(addToCart({
-        id: product.id,
+        id: product.documentId,
         title: product.title,
         price: product.price,
         quantity: 1,
@@ -33,7 +33,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }, [dispatch, product]);
 
   const fallbackImage = 'https://images.pexels.com/photos/3760323/pexels-photo-3760323.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
-  const productUrl = `/product/${product.slug || product.id}`;
+  const productUrl = `/product/${product.slug || product.documentId}`;
   const hasPrice = product.price > 0;
 
   return (

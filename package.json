@@ -12,6 +12,8 @@
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
     "@reduxjs/toolkit": "^2.1.0",
+    "@stripe/react-stripe-js": "^3.7.0",
+    "@stripe/stripe-js": "^7.4.0",
     "crypto-js": "^4.2.0",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.344.0",

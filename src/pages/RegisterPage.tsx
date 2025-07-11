@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useRegisterUserMutation } from '../store/slices/apiSlice';
 
 // Define validation schema with Zod
 const registerSchema = z.object({
@@ -19,6 +20,7 @@ const registerSchema = z.object({
   address: z.string().min(5, 'Address must be at least 5 characters'),
   postCode: z.string().min(3, 'Post code must be at least 3 characters'),
   city: z.string().min(2, 'City must be at least 2 characters'),
+  state: z.string().min(2, 'Sate must be at least 2 characters'),
   country: z.string().min(1, 'Please select a country'),
 
   // Contact Information
@@ -227,42 +229,48 @@ const RegisterPage = () => {
 
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const onSubmit = async (data: RegisterFormData) => {
     const payload = {
-      email: data.email,
-      username: data.username,
-      password: data.password,
-      newsletter_subscribe: String(data.newsletter),
-      firstname: data.firstName,
-      surname: data.surname,
-      company: data.companyName,
-      postcode: data.postCode,
-      city: data.city,
-      country: data.country === 'us' ? 'United States' : data.country,
-      phone_number: data.telephone,
-      address: data.address,
-    };
+        email: data.email,
+        username: data.username,
+        password: data.password,
+        newsletter_subscribe: String(data.newsletter),
+        firstname: data.firstName,
+        surname: data.surname,
+        phone_number: data.telephone,
+        Address: [
+          {
+            id: 1,
+            name: 'Billing Address',
+            company: data.companyName,
+            street_address: data.address,
+            city: data.city,
+            state: data.state, 
+            zip: data.postCode,
+            country: countries.find(c => c.value === data.country)?.label || data.country
+          },
+          {
+            id: 2,
+            name: 'Shipping Address',
+            company: data.companyName,
+            street_address: data.address,
+            city: data.city,
+            state: data.state, 
+            zip: data.postCode,
+            country: countries.find(c => c.value === data.country)?.label || data.country
+          }
+
+        ]
+      };
 
     try {
-      const res = await fetch(
-        'https://lovable-warmth-ed47be2d92.strapiapp.com/api/auth/local/register',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      if (res.ok) {
-        setMessage('Registration successful! Redirecting...');
-        setTimeout(() => navigate('/login'), 2000);
-      } else {
-        const errorData = await res.json();
-        setMessage(`Error: ${errorData.message || 'Registration failed'}`);
-      }
-    } catch (err) {
-      setMessage(`Network error: ${err}`);
+      await registerUser(payload).unwrap();
+      setMessage('Registration successful! Redirecting...');
+      setTimeout(() => navigate('/login'), 2000);
+    } catch (error: any) {
+      setMessage(`Error: ${error?.data?.error?.message || 'Registration failed'}`);
     }
   };
 
@@ -466,6 +474,27 @@ const RegisterPage = () => {
                   {errors.city && (
                     <p className="mt-1 text-sm text-red-600">
                       {errors.city.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="state"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    State
+                  </label>
+                  <input
+                    id="state"
+                    className={`mt-1 block w-full px-3 py-2 border ${
+                      errors.state ? 'border-red-300' : 'border-gray-300'
+                    } rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                    {...register('state')}
+                  />
+                  {errors.state && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.state.message}
                     </p>
                   )}
                 </div>

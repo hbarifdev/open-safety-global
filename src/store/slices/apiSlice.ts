@@ -107,6 +107,94 @@ export const apiSlice = createApi({
       providesTags: (result, error, slug) => [{ type: 'Product', id: slug }],
       keepUnusedDataFor: 3600,
     }),
+
+  // ✅ Stripe Payment Session
+    createStripeSession: builder.mutation({
+      query: (payload) => ({
+        url: '/orders/stripe',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+
+  // Get user profile
+    getUserProfile: builder.query({
+      query: (jwt: string) => ({
+        url: '/users/me',
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }),
+    }),
+
+  // Update user profile
+    updateUserProfile: builder.mutation({
+      query: ({ jwt, id, payload }) => ({
+        url: `/users/${id}`,
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: payload,
+      }),
+    }),
+    
+  // Get user orders
+    getUserOrders: builder.query({
+      query: (jwt: string) => ({
+        url: '/orders',
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+        params: {
+          populate: '*', 
+          sort: ['createdAt:desc'],
+        },
+      }),
+    }),
+
+  // User addresses
+    getUserAddresses: builder.query({
+      query: (jwt: string) => ({
+        url: '/users/me', 
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }),
+    }),
+
+    // Update user addresses
+    updateUserAddresses: builder.mutation({
+      query: ({ jwt, payload }) => ({
+        url: '/user-addresses/me',
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: payload,
+      }),
+    }),
+
+  // Register user
+    registerUser: builder.mutation({
+      query: (payload) => ({
+        url: '/auth/local/register',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+
+  // Login user
+    loginUser: builder.mutation({
+      query: (payload) => ({
+        url: '/auth/local',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+
   }),
 });
 
@@ -116,4 +204,12 @@ export const {
   useSearchProductsQuery,
   useGetProductsByIdsQuery,
   useGetProductDetailBySlugQuery,
+  useCreateStripeSessionMutation,
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+  useGetUserOrdersQuery,
+  useGetUserAddressesQuery,
+  useUpdateUserAddressesMutation,
+  useRegisterUserMutation,
+  useLoginUserMutation,
 } = apiSlice;

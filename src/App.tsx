@@ -31,6 +31,7 @@ import GalleryPage from './pages/GalleryPage';
 import NotFoundPage from './pages/NotFoundPage';
 import GuestOnlyRoute from './components/hoc/GuestOnlyRoute';
 import ProtectedRoute from './components/hoc/ProtectedRoute';
+import PaymentSuccessPage from './pages/PaymentSuccessPage';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               <Route path="/forgot-password" element={<GuestOnlyRoute><ForgotPasswordPage /></GuestOnlyRoute>} />
               <Route path="/reset-password" element={<GuestOnlyRoute><ResetPasswordPage /></GuestOnlyRoute>} />
               <Route path="/my-account" element={<ProtectedRoute><MyAccountPage /></ProtectedRoute>} />
+              <Route path="/success" element={<ProtectedRoute><PaymentSuccessPage /></ProtectedRoute>} />
               {/* <Route path="/product/:productId" element={<ProductPage />} /> */}
               <Route path="/product/:productSlug" element={<ProductPage />} />
               <Route path="/:categoryname" element={<CategoryPage />} />

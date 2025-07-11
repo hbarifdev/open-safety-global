@@ -1,8 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { setSecureCookie } from '../utils/secureCookie';
+import { getSecureCookie, setSecureCookie, removeSecureCookie } from '../utils/secureCookie';
+import { useLoginUserMutation } from '../store/slices/apiSlice';
+
 
 // Define validation schema with Zod
 const loginSchema = z.object({
@@ -21,27 +23,42 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
   const navigate = useNavigate();
+  const [loginUser] = useLoginUserMutation();
+  const location = useLocation();
+
+  // The page user originally intended to visit (e.g., /checkout)
+  const from = location.state?.from?.pathname || '/my-account';
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const response = await fetch('https://lovable-warmth-ed47be2d92.strapiapp.com/api/auth/local', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ identifier: data.email, password: data.password }),
-      });
+      const response = await loginUser({
+        identifier: data.email,
+        password: data.password,
+      }).unwrap();
 
-      const result = await response.json();
+      setSecureCookie('auth', { jwt: response.jwt, user: response.user });
 
-      if (!response.ok) {
-        throw new Error(result?.error?.message || 'Login failed');
+      // ✅ First: check if React Router passed a `from` location
+      let from = location.state?.from?.pathname;
+
+      // ✅ Fallback to secure cookie (in case of direct reload)
+      if (!from) {
+        const redirectCookie = getSecureCookie('redirectAfterLogin');
+        from = redirectCookie?.path;
       }
 
-      setSecureCookie('auth', { jwt: result.jwt, user: result.user });
-      navigate('/my-account');
+      // ✅ Default if nothing else
+      if (!from) {
+        from = '/my-account';
+      }
+
+      navigate(from, { replace: true });
+      removeSecureCookie('redirectAfterLogin');
     } catch (error: any) {
-      alert(error.message);
+      alert(error?.data?.error?.message || 'Login failed');
     }
   };
+
 
   return (
     <div className="bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

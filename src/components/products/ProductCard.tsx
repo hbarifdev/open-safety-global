@@ -35,7 +35,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const productUrl = `/product/${product.slug || product.documentId}`;
   const hasPrice = product.price > 0;
 
-  console.log('Rendering ProductCard for:', product);
 
   return (
     <article className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-lg h-full">

@@ -43,7 +43,7 @@ const ProductPage: React.FC = () => {
     const y = ((e.pageY - top - window.scrollY) / height) * 100;
 
     setZoomStyle({
-      backgroundImage: `url(${productData.featured.url})`,
+      backgroundImage: `url(${import.meta.env.VITE_API_BASE_URL+productData?.featured?.url})`,
       backgroundSize: '200% 200%',
       backgroundPosition: `${x}% ${y}%`,
     });

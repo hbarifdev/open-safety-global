@@ -168,7 +168,7 @@ const ProductPage: React.FC = () => {
               onMouseMove={handleMouseMove}
             >
               <img
-                src={productData?.featured?.url}
+                src={import.meta.env.VITE_API_BASE_URL+productData?.featured?.url}
                 alt={productData?.title}
                 className="w-full h-full max-h-[550px] object-contain"
                 onError={(e) => {

@@ -51,7 +51,7 @@ const CartDropdown: React.FC<CartDropdownProps> = ({ items, total }) => {
               <div key={item.id} className="flex items-center py-3 border-b border-gray-100 last:border-0">
                 <div className="h-16 w-16 flex-shrink-0 rounded-md border border-gray-200 overflow-hidden">
                   <img 
-                    src={item.featured} 
+                    src={import.meta.env.VITE_API_BASE_URL+item.featured} 
                     alt={item.title} 
                     className="h-full w-full object-cover object-center" 
                   />

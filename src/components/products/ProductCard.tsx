@@ -9,7 +9,6 @@ import { AppDispatch, RootState } from '../../store';
 interface ProductCardProps {
   product: Product;
 }
-
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isAdding, setIsAdding] = useState(false);
@@ -36,11 +35,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const productUrl = `/product/${product.slug || product.documentId}`;
   const hasPrice = product.price > 0;
 
+  console.log('Rendering ProductCard for:', product);
+
   return (
     <article className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-lg h-full">
       <Link to={productUrl} className="block overflow-hidden h-48 relative">
         <img 
-          src={product.featured?.url || fallbackImage}
+          src={import.meta.env.VITE_API_BASE_URL+product.featured?.url || fallbackImage}
           alt={product.title}
           className="w-full h-full object-contain transform transition-transform hover:scale-105"
           loading="lazy"

@@ -33,6 +33,11 @@ import GuestOnlyRoute from './components/hoc/GuestOnlyRoute';
 import ProtectedRoute from './components/hoc/ProtectedRoute';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
 import IecSafetyCase  from './pages/IecSafetyCase';
+import ModelPage from './pages/ModelPage';
+import DesignValidationPage from './pages/DesignValidationPage';
+import HazopPage from './pages/HazopPage';
+import ExplodedDrawings from './pages/ExplodedDrawings';
+import FmecaPage from './pages/FmecaPage';
 
 function App() {
   return (
@@ -70,6 +75,11 @@ function App() {
               <Route path="/news" element={<NewsPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
               <Route path="/accident" element={<IecSafetyCase />} />
+              <Route path="/model" element={<ModelPage />} />
+              <Route path="/design-validation" element={<DesignValidationPage />} />
+              <Route path="/hazops" element={<HazopPage />} />
+              <Route path="/exploded-drawings" element={<ExplodedDrawings />} />
+              <Route path="/fmeca" element={<FmecaPage />} />
 
               {/* Catch-all route for 404 Not Found */}
               <Route path="/404" element={<NotFoundPage />} />

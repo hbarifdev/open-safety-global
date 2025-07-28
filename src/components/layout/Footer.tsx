@@ -67,6 +67,11 @@ const Footer: React.FC = () => {
                   Certifications
                 </Link>
               </li>
+              <li>
+                <Link to="/safety-case" className="text-gray-400 hover:text-white transition">
+                  Safety Case
+                </Link>
+              </li>
             </ul>
           </div>
 

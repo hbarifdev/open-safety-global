@@ -32,6 +32,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import GuestOnlyRoute from './components/hoc/GuestOnlyRoute';
 import ProtectedRoute from './components/hoc/ProtectedRoute';
 import PaymentSuccessPage from './pages/PaymentSuccessPage';
+import IecSafetyCase  from './pages/IecSafetyCase';
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
               <Route path="/servicing" element={<ServicingPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
+              <Route path="/safety-case" element={<IecSafetyCase />} />
 
               {/* Catch-all route for 404 Not Found */}
               <Route path="/404" element={<NotFoundPage />} />

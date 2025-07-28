@@ -69,7 +69,7 @@ function App() {
               <Route path="/servicing" element={<ServicingPage />} />
               <Route path="/news" element={<NewsPage />} />
               <Route path="/gallery" element={<GalleryPage />} />
-              <Route path="/safety-case" element={<IecSafetyCase />} />
+              <Route path="/accident" element={<IecSafetyCase />} />
 
               {/* Catch-all route for 404 Not Found */}
               <Route path="/404" element={<NotFoundPage />} />

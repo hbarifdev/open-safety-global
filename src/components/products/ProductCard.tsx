@@ -10,6 +10,7 @@ interface ProductCardProps {
   product: Product;
 }
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  console.log('Rendering ProductCard for:', product);
   const dispatch = useDispatch<AppDispatch>();
   const [isAdding, setIsAdding] = useState(false);
   const { exchangeRate, selectedCurrency } = useSelector((state: RootState) => state.currency);
@@ -40,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     <article className="flex flex-col bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:-translate-y-1 hover:shadow-lg h-full">
       <Link to={productUrl} className="block overflow-hidden h-48 relative">
         <img 
-          src={import.meta.env.VITE_API_BASE_URL+product.featured?.url || fallbackImage}
+          src={product.featured?.url || fallbackImage}
           alt={product.title}
           className="w-full h-full object-contain transform transition-transform hover:scale-105"
           loading="lazy"
